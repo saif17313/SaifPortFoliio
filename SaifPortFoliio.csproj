@@ -119,6 +119,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\css\hero.css" />
     <Content Include="Content\css\loading.css" />
     <Content Include="Content\css\portfolio.css" />
     <Content Include="Content\img\photography\pic1.jpg" />

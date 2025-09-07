@@ -81,6 +81,100 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     
+    <!-- Simple inline script for immediate functionality -->
+    <script>
+        console.log('Master page script loaded');
+        
+        // Simple loading screen hide function
+        function hideLoadingScreen() {
+            console.log('hideLoadingScreen called');
+            const loadingScreen = document.getElementById('loading-screen');
+            
+            if (loadingScreen) {
+                console.log('Loading screen found, hiding...');
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.transition = 'opacity 0.5s ease-out';
+                
+                setTimeout(function() {
+                    loadingScreen.style.display = 'none';
+                    console.log('Loading screen hidden');
+                    
+                    // Start typewriter effect after loading screen is hidden
+                    setTimeout(initTypewriter, 500);
+                }, 500);
+            } else {
+                console.error('Loading screen not found');
+                // Start typewriter anyway
+                initTypewriter();
+            }
+        }
+        
+        // Improved typewriter effect with better timing
+        function initTypewriter() {
+            console.log('Starting typewriter effect...');
+            
+            const typewriterElement = document.getElementById('typewriter');
+            if (!typewriterElement) {
+                console.error('Typewriter element not found');
+                return;
+            }
+            
+            const roles = ['Software Developer', 'Graphics Designer', 'Problem Solver'];
+            let roleIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            
+            function type() {
+                const currentRole = roles[roleIndex];
+                
+                if (isDeleting) {
+                    // Deleting characters - slower and smoother
+                    typewriterElement.textContent = currentRole.substring(0, charIndex - 1);
+                    charIndex--;
+                    
+                    if (charIndex === 0) {
+                        isDeleting = false;
+                        roleIndex = (roleIndex + 1) % roles.length;
+                        // Pause before starting to type the next role
+                        setTimeout(type, 800);
+                        return;
+                    }
+                    // Slower deletion speed for smoother effect
+                    setTimeout(type, 80);
+                } else {
+                    // Typing characters
+                    typewriterElement.textContent = currentRole.substring(0, charIndex + 1);
+                    charIndex++;
+                    
+                    if (charIndex === currentRole.length) {
+                        isDeleting = true;
+                        // Pause at the end of each role before deleting
+                        setTimeout(type, 2500);
+                        return;
+                    }
+                    // Random typing speed for more natural feel
+                    const typingSpeed = Math.random() * 100 + 80; // Between 80-180ms
+                    setTimeout(type, typingSpeed);
+                }
+            }
+            
+            // Start typing after a brief delay
+            setTimeout(type, 1000);
+            console.log('Typewriter effect started');
+        }
+        
+        // Hide loading screen after 3 seconds
+        setTimeout(hideLoadingScreen, 3000);
+        
+        // Also try to hide on window load
+        window.addEventListener('load', function() {
+            console.log('Window loaded');
+            setTimeout(hideLoadingScreen, 1000);
+        });
+        
+        console.log('Scripts initialized');
+    </script>
+    
     <!-- Portfolio JavaScript -->
     <script src="~/Scripts/portfolio.js"></script>
     
