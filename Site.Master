@@ -25,6 +25,7 @@
     
     <!-- Custom Portfolio CSS -->
     <link href="~/Content/css/portfolio.css" rel="stylesheet" />
+    <link href="~/Content/css/loading.css" rel="stylesheet" />
     
     <!-- Custom CSS Placeholder -->
     <asp:ContentPlaceHolder ID="HeadContent" runat="server"></asp:ContentPlaceHolder>
@@ -45,11 +46,12 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <!-- Loading Screen Placeholder -->
-        <div id="loading-screen" style="display: none;">
+        <!-- Loading Screen -->
+        <div id="loading-screen">
             <div class="loading-content">
                 <div class="loading-circle"></div>
-                <p>Loading...</p>
+                <h2>Abdullah Al Saif</h2>
+                <p>Loading Portfolio...</p>
             </div>
         </div>
 
@@ -78,6 +80,9 @@
     
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <!-- Portfolio JavaScript -->
+    <script src="~/Scripts/portfolio.js"></script>
     
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/Scripts/bootstrap.js") %>
