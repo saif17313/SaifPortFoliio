@@ -101,6 +101,7 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="App_Data\Sql\01_tables.sql" />
+    <Content Include="App_Data\Sql\02_seeds.sql" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -118,6 +119,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\img\photography\pic1.jpg" />
+    <Content Include="Content\img\photography\pic2.jpg" />
     <Content Include="Content\img\profile\profile.jpg" />
     <Content Include="Content\img\projects\project1.jpg" />
     <Content Include="Content\Site.css" />
@@ -233,9 +236,7 @@
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\img\photography\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
