@@ -8,31 +8,44 @@ namespace SaifPortFoliio.App_Code
 {
     public class Db
     {
-        private static readonly string ConnectionString = 
+        private static readonly string ConnectionString =
             ConfigurationManager.ConnectionStrings["SaifDb"].ConnectionString;
 
         #region Projects CRUD Operations
-        
+
         public static List<Project> GetAllProjects()
         {
             var projects = new List<Project>();
             using (var conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
-                var cmd = new SqlCommand("SELECT Id, Title, Slug, ShortDescription, CoverImagePath, LiveUrl, RepoUrl FROM Projects ORDER BY Id DESC", conn);
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
+                using (var cmd = new SqlCommand(
+                    "SELECT Id, Title, Slug, ShortDescription, CoverImagePath, LiveUrl, RepoUrl FROM Projects ORDER BY Id DESC",
+                    conn))
+                using (var reader = cmd.ExecuteReader())
                 {
-                    projects.Add(new Project
+                    // ordinals
+                    int iId = reader.GetOrdinal("Id");
+                    int iTitle = reader.GetOrdinal("Title");
+                    int iSlug = reader.GetOrdinal("Slug");
+                    int iShort = reader.GetOrdinal("ShortDescription");
+                    int iCover = reader.GetOrdinal("CoverImagePath");
+                    int iLive = reader.GetOrdinal("LiveUrl");
+                    int iRepo = reader.GetOrdinal("RepoUrl");
+
+                    while (reader.Read())
                     {
-                        Id = reader.GetInt32("Id"),
-                        Title = reader.GetString("Title"),
-                        Slug = reader.GetString("Slug"),
-                        ShortDescription = reader.IsDBNull("ShortDescription") ? null : reader.GetString("ShortDescription"),
-                        CoverImagePath = reader.IsDBNull("CoverImagePath") ? null : reader.GetString("CoverImagePath"),
-                        LiveUrl = reader.IsDBNull("LiveUrl") ? null : reader.GetString("LiveUrl"),
-                        RepoUrl = reader.IsDBNull("RepoUrl") ? null : reader.GetString("RepoUrl")
-                    });
+                        projects.Add(new Project
+                        {
+                            Id = reader.GetInt32(iId),
+                            Title = reader.GetString(iTitle),
+                            Slug = reader.GetString(iSlug),
+                            ShortDescription = reader.IsDBNull(iShort) ? null : reader.GetString(iShort),
+                            CoverImagePath = reader.IsDBNull(iCover) ? null : reader.GetString(iCover),
+                            LiveUrl = reader.IsDBNull(iLive) ? null : reader.GetString(iLive),
+                            RepoUrl = reader.IsDBNull(iRepo) ? null : reader.GetString(iRepo)
+                        });
+                    }
                 }
             }
             return projects;
@@ -43,21 +56,35 @@ namespace SaifPortFoliio.App_Code
             using (var conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
-                var cmd = new SqlCommand("SELECT Id, Title, Slug, ShortDescription, CoverImagePath, LiveUrl, RepoUrl FROM Projects WHERE Id = @Id", conn);
-                cmd.Parameters.AddWithValue("@Id", id);
-                var reader = cmd.ExecuteReader();
-                if (reader.Read())
+                using (var cmd = new SqlCommand(
+                    "SELECT Id, Title, Slug, ShortDescription, CoverImagePath, LiveUrl, RepoUrl FROM Projects WHERE Id = @Id",
+                    conn))
                 {
-                    return new Project
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        Id = reader.GetInt32("Id"),
-                        Title = reader.GetString("Title"),
-                        Slug = reader.GetString("Slug"),
-                        ShortDescription = reader.IsDBNull("ShortDescription") ? null : reader.GetString("ShortDescription"),
-                        CoverImagePath = reader.IsDBNull("CoverImagePath") ? null : reader.GetString("CoverImagePath"),
-                        LiveUrl = reader.IsDBNull("LiveUrl") ? null : reader.GetString("LiveUrl"),
-                        RepoUrl = reader.IsDBNull("RepoUrl") ? null : reader.GetString("RepoUrl")
-                    };
+                        if (reader.Read())
+                        {
+                            int iId = reader.GetOrdinal("Id");
+                            int iTitle = reader.GetOrdinal("Title");
+                            int iSlug = reader.GetOrdinal("Slug");
+                            int iShort = reader.GetOrdinal("ShortDescription");
+                            int iCover = reader.GetOrdinal("CoverImagePath");
+                            int iLive = reader.GetOrdinal("LiveUrl");
+                            int iRepo = reader.GetOrdinal("RepoUrl");
+
+                            return new Project
+                            {
+                                Id = reader.GetInt32(iId),
+                                Title = reader.GetString(iTitle),
+                                Slug = reader.GetString(iSlug),
+                                ShortDescription = reader.IsDBNull(iShort) ? null : reader.GetString(iShort),
+                                CoverImagePath = reader.IsDBNull(iCover) ? null : reader.GetString(iCover),
+                                LiveUrl = reader.IsDBNull(iLive) ? null : reader.GetString(iLive),
+                                RepoUrl = reader.IsDBNull(iRepo) ? null : reader.GetString(iRepo)
+                            };
+                        }
+                    }
                 }
             }
             return null;
@@ -70,15 +97,18 @@ namespace SaifPortFoliio.App_Code
                 using (var conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand(@"INSERT INTO Projects (Title, Slug, ShortDescription, CoverImagePath, LiveUrl, RepoUrl) 
-                                              VALUES (@Title, @Slug, @ShortDescription, @CoverImagePath, @LiveUrl, @RepoUrl)", conn);
-                    cmd.Parameters.AddWithValue("@Title", project.Title);
-                    cmd.Parameters.AddWithValue("@Slug", project.Slug);
-                    cmd.Parameters.AddWithValue("@ShortDescription", (object)project.ShortDescription ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@CoverImagePath", (object)project.CoverImagePath ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@LiveUrl", (object)project.LiveUrl ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@RepoUrl", (object)project.RepoUrl ?? DBNull.Value);
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new SqlCommand(
+                        @"INSERT INTO Projects (Title, Slug, ShortDescription, CoverImagePath, LiveUrl, RepoUrl) 
+                          VALUES (@Title, @Slug, @ShortDescription, @CoverImagePath, @LiveUrl, @RepoUrl)", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Title", project.Title);
+                        cmd.Parameters.AddWithValue("@Slug", project.Slug);
+                        cmd.Parameters.AddWithValue("@ShortDescription", (object)project.ShortDescription ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CoverImagePath", (object)project.CoverImagePath ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@LiveUrl", (object)project.LiveUrl ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@RepoUrl", (object)project.RepoUrl ?? DBNull.Value);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
                 }
             }
             catch { return false; }
@@ -91,17 +121,20 @@ namespace SaifPortFoliio.App_Code
                 using (var conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand(@"UPDATE Projects SET Title = @Title, Slug = @Slug, 
-                                              ShortDescription = @ShortDescription, CoverImagePath = @CoverImagePath, 
-                                              LiveUrl = @LiveUrl, RepoUrl = @RepoUrl WHERE Id = @Id", conn);
-                    cmd.Parameters.AddWithValue("@Id", project.Id);
-                    cmd.Parameters.AddWithValue("@Title", project.Title);
-                    cmd.Parameters.AddWithValue("@Slug", project.Slug);
-                    cmd.Parameters.AddWithValue("@ShortDescription", (object)project.ShortDescription ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@CoverImagePath", (object)project.CoverImagePath ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@LiveUrl", (object)project.LiveUrl ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@RepoUrl", (object)project.RepoUrl ?? DBNull.Value);
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new SqlCommand(
+                        @"UPDATE Projects SET Title = @Title, Slug = @Slug, 
+                          ShortDescription = @ShortDescription, CoverImagePath = @CoverImagePath, 
+                          LiveUrl = @LiveUrl, RepoUrl = @RepoUrl WHERE Id = @Id", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Id", project.Id);
+                        cmd.Parameters.AddWithValue("@Title", project.Title);
+                        cmd.Parameters.AddWithValue("@Slug", project.Slug);
+                        cmd.Parameters.AddWithValue("@ShortDescription", (object)project.ShortDescription ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@CoverImagePath", (object)project.CoverImagePath ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@LiveUrl", (object)project.LiveUrl ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@RepoUrl", (object)project.RepoUrl ?? DBNull.Value);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
                 }
             }
             catch { return false; }
@@ -114,9 +147,11 @@ namespace SaifPortFoliio.App_Code
                 using (var conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand("DELETE FROM Projects WHERE Id = @Id", conn);
-                    cmd.Parameters.AddWithValue("@Id", id);
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new SqlCommand("DELETE FROM Projects WHERE Id = @Id", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Id", id);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
                 }
             }
             catch { return false; }
@@ -132,17 +167,25 @@ namespace SaifPortFoliio.App_Code
             using (var conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
-                var cmd = new SqlCommand("SELECT Id, Name, LevelPercent, Category FROM Skills ORDER BY Category, Name", conn);
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
+                using (var cmd = new SqlCommand(
+                    "SELECT Id, Name, LevelPercent, Category FROM Skills ORDER BY Category, Name", conn))
+                using (var reader = cmd.ExecuteReader())
                 {
-                    skills.Add(new Skill
+                    int iId = reader.GetOrdinal("Id");
+                    int iName = reader.GetOrdinal("Name");
+                    int iLevel = reader.GetOrdinal("LevelPercent");
+                    int iCat = reader.GetOrdinal("Category");
+
+                    while (reader.Read())
                     {
-                        Id = reader.GetInt32("Id"),
-                        Name = reader.GetString("Name"),
-                        LevelPercent = reader.IsDBNull("LevelPercent") ? 0 : reader.GetInt32("LevelPercent"),
-                        Category = reader.IsDBNull("Category") ? null : reader.GetString("Category")
-                    });
+                        skills.Add(new Skill
+                        {
+                            Id = reader.GetInt32(iId),
+                            Name = reader.GetString(iName),
+                            LevelPercent = reader.IsDBNull(iLevel) ? (int?)null : reader.GetInt32(iLevel),
+                            Category = reader.IsDBNull(iCat) ? null : reader.GetString(iCat)
+                        });
+                    }
                 }
             }
             return skills;
@@ -155,12 +198,15 @@ namespace SaifPortFoliio.App_Code
                 using (var conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand(@"INSERT INTO Skills (Name, LevelPercent, Category) 
-                                              VALUES (@Name, @LevelPercent, @Category)", conn);
-                    cmd.Parameters.AddWithValue("@Name", skill.Name);
-                    cmd.Parameters.AddWithValue("@LevelPercent", (object)skill.LevelPercent ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Category", (object)skill.Category ?? DBNull.Value);
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new SqlCommand(
+                        @"INSERT INTO Skills (Name, LevelPercent, Category) 
+                          VALUES (@Name, @LevelPercent, @Category)", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Name", skill.Name);
+                        cmd.Parameters.AddWithValue("@LevelPercent", (object)skill.LevelPercent ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Category", (object)skill.Category ?? DBNull.Value);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
                 }
             }
             catch { return false; }
@@ -173,13 +219,16 @@ namespace SaifPortFoliio.App_Code
                 using (var conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand(@"UPDATE Skills SET Name = @Name, LevelPercent = @LevelPercent, 
-                                              Category = @Category WHERE Id = @Id", conn);
-                    cmd.Parameters.AddWithValue("@Id", skill.Id);
-                    cmd.Parameters.AddWithValue("@Name", skill.Name);
-                    cmd.Parameters.AddWithValue("@LevelPercent", (object)skill.LevelPercent ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Category", (object)skill.Category ?? DBNull.Value);
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new SqlCommand(
+                        @"UPDATE Skills SET Name = @Name, LevelPercent = @LevelPercent, 
+                          Category = @Category WHERE Id = @Id", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Id", skill.Id);
+                        cmd.Parameters.AddWithValue("@Name", skill.Name);
+                        cmd.Parameters.AddWithValue("@LevelPercent", (object)skill.LevelPercent ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Category", (object)skill.Category ?? DBNull.Value);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
                 }
             }
             catch { return false; }
@@ -192,9 +241,11 @@ namespace SaifPortFoliio.App_Code
                 using (var conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand("DELETE FROM Skills WHERE Id = @Id", conn);
-                    cmd.Parameters.AddWithValue("@Id", id);
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new SqlCommand("DELETE FROM Skills WHERE Id = @Id", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Id", id);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
                 }
             }
             catch { return false; }
@@ -210,15 +261,20 @@ namespace SaifPortFoliio.App_Code
             using (var conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
-                var cmd = new SqlCommand("SELECT Id, RoleText FROM Roles ORDER BY Id", conn);
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
+                using (var cmd = new SqlCommand("SELECT Id, RoleText FROM Roles ORDER BY Id", conn))
+                using (var reader = cmd.ExecuteReader())
                 {
-                    roles.Add(new Role
+                    int iId = reader.GetOrdinal("Id");
+                    int iText = reader.GetOrdinal("RoleText");
+
+                    while (reader.Read())
                     {
-                        Id = reader.GetInt32("Id"),
-                        RoleText = reader.GetString("RoleText")
-                    });
+                        roles.Add(new Role
+                        {
+                            Id = reader.GetInt32(iId),
+                            RoleText = reader.GetString(iText)
+                        });
+                    }
                 }
             }
             return roles;
@@ -231,9 +287,11 @@ namespace SaifPortFoliio.App_Code
                 using (var conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand("INSERT INTO Roles (RoleText) VALUES (@RoleText)", conn);
-                    cmd.Parameters.AddWithValue("@RoleText", role.RoleText);
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new SqlCommand("INSERT INTO Roles (RoleText) VALUES (@RoleText)", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@RoleText", role.RoleText);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
                 }
             }
             catch { return false; }
@@ -246,9 +304,11 @@ namespace SaifPortFoliio.App_Code
                 using (var conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand("DELETE FROM Roles WHERE Id = @Id", conn);
-                    cmd.Parameters.AddWithValue("@Id", id);
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new SqlCommand("DELETE FROM Roles WHERE Id = @Id", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Id", id);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
                 }
             }
             catch { return false; }
@@ -264,17 +324,25 @@ namespace SaifPortFoliio.App_Code
             using (var conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
-                var cmd = new SqlCommand("SELECT Id, Name, [Description], ImagePath FROM Photography ORDER BY Id DESC", conn);
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
+                using (var cmd = new SqlCommand(
+                    "SELECT Id, Name, [Description], ImagePath FROM Photography ORDER BY Id DESC", conn))
+                using (var reader = cmd.ExecuteReader())
                 {
-                    photos.Add(new Photography
+                    int iId = reader.GetOrdinal("Id");
+                    int iName = reader.GetOrdinal("Name");
+                    int iDesc = reader.GetOrdinal("Description");
+                    int iPath = reader.GetOrdinal("ImagePath");
+
+                    while (reader.Read())
                     {
-                        Id = reader.GetInt32("Id"),
-                        Name = reader.GetString("Name"),
-                        Description = reader.IsDBNull("Description") ? null : reader.GetString("Description"),
-                        ImagePath = reader.GetString("ImagePath")
-                    });
+                        photos.Add(new Photography
+                        {
+                            Id = reader.GetInt32(iId),
+                            Name = reader.GetString(iName),
+                            Description = reader.IsDBNull(iDesc) ? null : reader.GetString(iDesc),
+                            ImagePath = reader.GetString(iPath)
+                        });
+                    }
                 }
             }
             return photos;
@@ -287,12 +355,15 @@ namespace SaifPortFoliio.App_Code
                 using (var conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand(@"INSERT INTO Photography (Name, [Description], ImagePath) 
-                                              VALUES (@Name, @Description, @ImagePath)", conn);
-                    cmd.Parameters.AddWithValue("@Name", photo.Name);
-                    cmd.Parameters.AddWithValue("@Description", (object)photo.Description ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@ImagePath", photo.ImagePath);
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new SqlCommand(
+                        @"INSERT INTO Photography (Name, [Description], ImagePath) 
+                          VALUES (@Name, @Description, @ImagePath)", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Name", photo.Name);
+                        cmd.Parameters.AddWithValue("@Description", (object)photo.Description ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@ImagePath", photo.ImagePath);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
                 }
             }
             catch { return false; }
@@ -305,9 +376,11 @@ namespace SaifPortFoliio.App_Code
                 using (var conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand("DELETE FROM Photography WHERE Id = @Id", conn);
-                    cmd.Parameters.AddWithValue("@Id", id);
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new SqlCommand("DELETE FROM Photography WHERE Id = @Id", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Id", id);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
                 }
             }
             catch { return false; }

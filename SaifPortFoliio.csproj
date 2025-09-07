@@ -119,6 +119,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\css\portfolio.css" />
     <Content Include="Content\img\photography\pic1.jpg" />
     <Content Include="Content\img\photography\pic2.jpg" />
     <Content Include="Content\img\profile\profile.jpg" />
@@ -240,7 +241,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\css\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
