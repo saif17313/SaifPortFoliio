@@ -126,7 +126,15 @@
                 <div class="col-lg-6">
                     <div class="about-image">
                         <div class="image-container">
-                            <img src="/Content/img/profile/profile-photo.jpg" alt="Abdullah Al Saif" class="profile-img">
+                            <img src="/Content/img/profile/profile.jpg" alt="Abdullah Al Saif" class="profile-img"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                 onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
+                            <div class="profile-placeholder" style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, #f1f5f9, #e2e8f0); color: #64748b; font-weight: 500;">
+                                <div style="text-align: center;">
+                                    <i class="fas fa-user-circle" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.7;"></i>
+                                    <div>Profile Photo</div>
+                                </div>
+                            </div>
                             <div class="image-overlay">
                                 <div class="overlay-content">
                                     <h4>Let's Create Something Amazing Together!</h4>
@@ -249,26 +257,12 @@
                 </div>
             </div>
             
-            <!-- Project Filter Buttons -->
-            <div class="row mb-5">
-                <div class="col-lg-12 text-center">
-                    <div class="project-filters">
-                        <button class="filter-btn active" data-filter="all">All Projects</button>
-                        <button class="filter-btn" data-filter="development">Development</button>
-                        <button class="filter-btn" data-filter="design">Design</button>
-                        <button class="filter-btn" data-filter="mobile">Mobile</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Projects Grid -->
-            <div class="row" id="projects-grid">
+            <!-- Projects Thumbnail Grid -->
+            <div class="projects-thumbnails" id="projects-grid">
                 <!-- Projects will be dynamically loaded here -->
-                <div class="col-12 text-center">
-                    <div class="projects-loading">
-                        <i class="fas fa-spinner fa-spin fa-2x"></i>
-                        <p>Loading projects...</p>
-                    </div>
+                <div class="loading-placeholder">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p>Loading projects...</p>
                 </div>
             </div>
             
@@ -288,32 +282,17 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center mb-5">
-                    <h2 class="section-title">Photography & Creative Work</h2>
+                    <h2 class="section-title">Photography</h2>
                     <p class="section-subtitle">Capturing moments and expressing creativity through visual storytelling</p>
                 </div>
             </div>
             
-            <!-- Gallery Categories -->
-            <div class="row mb-5">
-                <div class="col-lg-12 text-center">
-                    <div class="gallery-filters">
-                        <button class="gallery-filter-btn active" data-category="all">All Photos</button>
-                        <button class="gallery-filter-btn" data-category="portraits">Portraits</button>
-                        <button class="gallery-filter-btn" data-category="nature">Nature</button>
-                        <button class="gallery-filter-btn" data-category="urban">Urban</button>
-                        <button class="gallery-filter-btn" data-category="events">Events</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Photography Grid -->
-            <div class="row" id="photography-grid">
+            <!-- Photography Thumbnail Grid -->
+            <div class="photography-thumbnails" id="photography-grid">
                 <!-- Photos will be dynamically loaded here -->
-                <div class="col-12 text-center">
-                    <div class="gallery-loading">
-                        <i class="fas fa-camera fa-2x"></i>
-                        <p>Loading gallery...</p>
-                    </div>
+                <div class="loading-placeholder">
+                    <i class="fas fa-camera fa-2x"></i>
+                    <p>Loading gallery...</p>
                 </div>
             </div>
             
@@ -321,39 +300,35 @@
             <div class="row mt-5">
                 <div class="col-lg-12 text-center">
                     <a href="#" class="btn btn-outline-primary btn-lg" id="load-more-photos">
-                        <i class="fas fa-images"></i> Load More Photos
+                        <i class="fas fa-images"></i> View All Photos
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Photography Modal -->
-    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+    <!-- Photography Modal/Lightbox -->
+    <div class="modal fade" id="photoLightbox" tabindex="-1" aria-labelledby="photoLightboxLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content bg-dark">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title text-white" id="photoModalLabel">Photo Details</h5>
+                    <h5 class="modal-title text-white" id="photoLightboxLabel">Photo Gallery</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-center">
-                    <img id="modalImage" src="" alt="" class="img-fluid rounded">
-                    <div class="photo-details mt-3">
-                        <h6 id="modalPhotoTitle" class="text-white"></h6>
-                        <p id="modalPhotoDescription" class="text-light"></p>
-                        <div class="photo-meta">
-                            <span id="modalPhotoCategory" class="badge bg-primary me-2"></span>
-                            <span id="modalPhotoDate" class="text-muted"></span>
+                <div class="modal-body text-center p-0">
+                    <img id="lightboxImage" src="" alt="" class="img-fluid w-100" style="max-height: 80vh; object-fit: contain;">
+                    <div class="photo-details p-4">
+                        <h4 id="lightboxPhotoTitle" class="text-white mb-2"></h4>
+                        <p id="lightboxPhotoDescription" class="text-light mb-3"></p>
+                        <div class="photo-navigation">
+                            <button type="button" class="btn btn-outline-light me-2" id="prevPhotoBtn">
+                                <i class="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn btn-outline-light" id="nextPhotoBtn">
+                                Next <i class="fas fa-chevron-right"></i>
+                            </button>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer border-0 justify-content-center">
-                    <button type="button" class="btn btn-outline-light" id="prevPhoto">
-                        <i class="fas fa-chevron-left"></i> Previous
-                    </button>
-                    <button type="button" class="btn btn-outline-light" id="nextPhoto">
-                        Next <i class="fas fa-chevron-right"></i>
-                    </button>
                 </div>
             </div>
         </div>
@@ -417,4 +392,6 @@
     <link href="~/Content/css/about.css" rel="stylesheet" />
     <link href="~/Content/css/projects.css" rel="stylesheet" />
     <link href="~/Content/css/photography.css" rel="stylesheet" />
+    <link href="~/Content/css/image-fallback.css" rel="stylesheet" />
+    <link href="~/Content/css/thumbnails.css" rel="stylesheet" />
 </asp:Content>

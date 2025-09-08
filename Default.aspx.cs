@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
+using SaifPortFoliio; // Add this to access the Db class
 
 namespace SaifPortFoliio
 {

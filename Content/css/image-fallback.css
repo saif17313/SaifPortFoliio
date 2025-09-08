@@ -1,0 +1,106 @@
+/* Enhanced image handling for projects and photography */
+
+.project-img, .photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    display: none; /* Hidden by default until loaded */
+}
+
+.project-img.loaded, .photo-img.loaded {
+    display: block;
+}
+
+.project-image, .photo-image {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Enhanced placeholders */
+.project-image-placeholder, .photo-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    transition: opacity 0.3s ease;
+}
+
+.project-image-placeholder i, .photo-placeholder i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.project-image-placeholder span, .photo-placeholder span {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    line-height: 1.4;
+}
+
+/* Category-specific colors */
+.project-image-placeholder.development i {
+    color: #2563eb;
+}
+
+.project-image-placeholder.design i {
+    color: #f59e0b;
+}
+
+.project-image-placeholder.mobile i {
+    color: #10b981;
+}
+
+.photo-placeholder[data-category="portraits"] i {
+    color: #8b5cf6;
+}
+
+.photo-placeholder[data-category="nature"] i {
+    color: #10b981;
+}
+
+.photo-placeholder[data-category="urban"] i {
+    color: #64748b;
+}
+
+.photo-placeholder[data-category="events"] i {
+    color: #f59e0b;
+}
+
+/* Hover effects work on both images and placeholders */
+.project-card:hover .project-img {
+    transform: scale(1.1);
+}
+
+.photo-card:hover .photo-img {
+    transform: scale(1.1);
+}
+
+/* Debug border for development (remove in production) */
+.project-image, .photo-image {
+    border: 2px solid transparent;
+}
+
+.project-image:has(.project-image-placeholder[style*="flex"]) {
+    border-color: #e2e8f0;
+}
+
+.photo-image:has(.photo-placeholder[style*="flex"]) {
+    border-color: #e2e8f0;
+}

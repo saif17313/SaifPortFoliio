@@ -50,9 +50,22 @@ IF OBJECT_ID('dbo.Photography','U') IS NOT NULL DROP TABLE dbo.Photography;
 GO
 CREATE TABLE dbo.Photography
 (
-    Id          INT IDENTITY(1,1) PRIMARY KEY,
-    Name        NVARCHAR(140) NOT NULL,
+    Id            INT IDENTITY(1,1) PRIMARY KEY,
+    Name          NVARCHAR(140) NOT NULL,
     [Description] NVARCHAR(MAX) NULL,
-    ImagePath   NVARCHAR(260) NOT NULL               -- /Content/img/photography/...
+    ImagePath     NVARCHAR(260) NOT NULL             -- /Content/img/photography/...
+);
+GO
+
+-- Messages (email + message form submissions)
+IF OBJECT_ID('dbo.Messages','U') IS NOT NULL DROP TABLE dbo.Messages;
+GO
+CREATE TABLE dbo.Messages
+(
+    Id        INT IDENTITY(1,1) PRIMARY KEY,
+    Email     NVARCHAR(256) NOT NULL,
+    Message   NVARCHAR(MAX) NOT NULL,
+    IsRead    BIT NOT NULL DEFAULT 0,   -- 0 = Unread, 1 = Read
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE()
 );
 GO
