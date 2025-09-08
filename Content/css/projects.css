@@ -78,7 +78,10 @@
     position: relative;
     height: 250px;
     overflow: hidden;
-    background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .project-image img {
@@ -86,10 +89,57 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
+    display: none; /* Hide by default until loaded */
+}
+
+.project-image img.loaded {
+    display: block;
 }
 
 .project-card:hover .project-image img {
     transform: scale(1.1);
+}
+
+/* Enhanced placeholder for missing images */
+.project-image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    position: relative;
+}
+
+.project-image-placeholder i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: #94a3b8;
+    opacity: 0.7;
+}
+
+.project-image-placeholder span {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Add project type specific icons */
+.project-image-placeholder.development i {
+    color: #2563eb;
+}
+
+.project-image-placeholder.design i {
+    color: #f59e0b;
+}
+
+.project-image-placeholder.mobile i {
+    color: #10b981;
 }
 
 .project-overlay {
@@ -200,25 +250,6 @@
 .status-in-progress {
     background: #fef3c7;
     color: #92400e;
-}
-
-/* Placeholder for missing project images */
-.project-image-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #64748b;
-    font-size: 1rem;
-    font-weight: 500;
-    text-align: center;
-    padding: 2rem;
-}
-
-.project-image-placeholder i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    display: block;
-    width: 100%;
 }
 
 /* =========================
@@ -393,5 +424,9 @@
         width: 60px;
         height: 60px;
         font-size: 1.5rem;
+    }
+    
+    .project-image-placeholder i {
+        font-size: 3rem;
     }
 }

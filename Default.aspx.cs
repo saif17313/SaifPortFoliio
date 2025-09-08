@@ -14,8 +14,26 @@ namespace SaifPortFoliio
         {
             if (!IsPostBack)
             {
+                LoadPageData();
+            }
+        }
+        
+        private void LoadPageData()
+        {
+            try
+            {
+                // Load typewriter roles
                 LoadTypewriterRoles();
+                
+                // Load projects data
                 LoadProjects();
+                
+                // Debug output
+                System.Diagnostics.Debug.WriteLine("Page data loaded successfully");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error loading page data: " + ex.Message);
             }
         }
         
@@ -23,8 +41,7 @@ namespace SaifPortFoliio
         {
             try
             {
-                // Get roles from database - using default roles for now
-                // TODO: Fix database access after ensuring proper project structure
+                // Use default roles for now (database integration can be added later)
                 var defaultRoles = new List<string> { "Software Developer", "Graphics Designer", "Problem Solver" };
                 
                 // Convert roles to JavaScript array
@@ -32,21 +49,22 @@ namespace SaifPortFoliio
                 
                 // Register JavaScript to set roles
                 var script = new StringBuilder();
-                script.AppendLine("<script type='text/javascript'>");
+                script.AppendLine("console.log('=== ROLES DATA LOADED ===');");
                 script.AppendLine("window.portfolioRoles = " + rolesJson + ";");
-                script.AppendLine("</script>");
+                script.AppendLine("console.log('Roles:', window.portfolioRoles);");
                 
                 // Add script to page
-                ClientScript.RegisterStartupScript(this.GetType(), "PortfolioRoles", script.ToString(), false);
+                ClientScript.RegisterStartupScript(this.GetType(), "PortfolioRoles", script.ToString(), true);
+                
+                System.Diagnostics.Debug.WriteLine("Typewriter roles loaded: " + string.Join(", ", defaultRoles));
             }
             catch (Exception ex)
             {
-                // Log error (in production, use proper logging)
                 System.Diagnostics.Debug.WriteLine("Error loading roles: " + ex.Message);
                 
                 // Fallback: Register default roles
-                var defaultScript = "<script type='text/javascript'>window.portfolioRoles = ['Software Developer', 'Graphics Designer', 'Problem Solver'];</script>";
-                ClientScript.RegisterStartupScript(this.GetType(), "DefaultRoles", defaultScript, false);
+                var fallbackScript = "console.log('=== FALLBACK ROLES ==='); window.portfolioRoles = ['Software Developer', 'Graphics Designer', 'Problem Solver'];";
+                ClientScript.RegisterStartupScript(this.GetType(), "DefaultRoles", fallbackScript, true);
             }
         }
         
@@ -54,7 +72,7 @@ namespace SaifPortFoliio
         {
             try
             {
-                // For now, we'll use hardcoded projects. Later we'll integrate with database
+                // Sample projects data
                 var projects = new[]
                 {
                     new {
@@ -88,6 +106,7 @@ namespace SaifPortFoliio
                 
                 // Convert projects to JSON for JavaScript
                 var projectsJson = new StringBuilder();
+                projectsJson.AppendLine("console.log('=== PROJECTS DATA LOADED ===');");
                 projectsJson.AppendLine("window.portfolioProjects = [");
                 
                 for (int i = 0; i < projects.Length; i++)
@@ -101,22 +120,32 @@ namespace SaifPortFoliio
                     projectsJson.AppendLine($"  liveUrl: \"{project.LiveUrl}\",");
                     projectsJson.AppendLine($"  repoUrl: \"{project.RepoUrl}\",");
                     projectsJson.AppendLine($"  technologies: [\"{string.Join("\",\"", project.Technologies)}\"]");
-                    projectsJson.AppendLine(i < projects.Length - 1 ? "}," : "}");
+                    
+                    if (i < projects.Length - 1)
+                    {
+                        projectsJson.AppendLine("},");
+                    }
+                    else
+                    {
+                        projectsJson.AppendLine("}");
+                    }
                 }
                 
                 projectsJson.AppendLine("];");
+                projectsJson.AppendLine("console.log('Projects loaded:', window.portfolioProjects.length, 'projects');");
                 
                 // Register JavaScript
-                var script = "<script type='text/javascript'>" + projectsJson.ToString() + "</script>";
-                ClientScript.RegisterStartupScript(this.GetType(), "PortfolioProjects", script, false);
+                ClientScript.RegisterStartupScript(this.GetType(), "PortfolioProjects", projectsJson.ToString(), true);
+                
+                System.Diagnostics.Debug.WriteLine("Projects loaded: " + projects.Length + " projects");
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Error loading projects: " + ex.Message);
                 
                 // Fallback empty projects array
-                var fallbackScript = "<script type='text/javascript'>window.portfolioProjects = [];</script>";
-                ClientScript.RegisterStartupScript(this.GetType(), "FallbackProjects", fallbackScript, false);
+                var fallbackScript = "console.log('=== FALLBACK PROJECTS ==='); window.portfolioProjects = [];";
+                ClientScript.RegisterStartupScript(this.GetType(), "FallbackProjects", fallbackScript, true);
             }
         }
     }

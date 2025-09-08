@@ -57,7 +57,7 @@
         </div>
 
         <!-- Navigation Menu -->
-        <nav id="main-nav" class="navbar navbar-expand-lg navbar-light fixed-top">
+        <nav id="main-nav" class="navbar navbar-expand-lg navbar-light fixed-top" style="display: none;">
             <div class="container">
                 <a class="navbar-brand" href="#hero">
                     <span class="brand-text">Abdullah Al Saif</span>
@@ -133,313 +133,132 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     
-    <!-- Enhanced script with navigation, animations, and projects -->
+    <!-- SIMPLE INLINE SOLUTION -->
     <script>
-        console.log('Master page script loaded');
+        console.log('=== MASTER PAGE LOADED ===');
         
-        // Navigation and loading screen management
-        function hideLoadingScreen() {
-            console.log('hideLoadingScreen called');
+        // Force hide loading screen after 3 seconds no matter what
+        setTimeout(function() {
+            console.log('=== FORCING LOADING SCREEN HIDE ===');
+            
             const loadingScreen = document.getElementById('loading-screen');
             const navigation = document.getElementById('main-nav');
             
             if (loadingScreen) {
-                console.log('Loading screen found, hiding...');
                 loadingScreen.style.opacity = '0';
                 loadingScreen.style.transition = 'opacity 0.5s ease-out';
                 
-                setTimeout(function() {
+                setTimeout(() => {
                     loadingScreen.style.display = 'none';
-                    console.log('Loading screen hidden');
+                    console.log('=== LOADING SCREEN HIDDEN ===');
                     
                     // Show navigation
                     if (navigation) {
                         navigation.style.display = 'block';
-                        setTimeout(() => {
-                            navigation.classList.add('nav-visible');
-                        }, 100);
+                        navigation.classList.add('nav-visible');
+                        console.log('=== NAVIGATION SHOWN ===');
                     }
                     
-                    // Start typewriter effect and initialize components
-                    setTimeout(function() {
-                        initTypewriter();
-                        initNavigation();
-                        initScrollAnimations();
-                        initProjects();
-                    }, 500);
+                    // Start typewriter
+                    startTypewriter();
+                    
                 }, 500);
-            } else {
-                console.error('Loading screen not found');
-                initTypewriter();
-                initNavigation();
-                initScrollAnimations();
-                initProjects();
             }
-        }
+        }, 3000);
         
-        // Navigation functionality
-        function initNavigation() {
-            console.log('Initializing navigation...');
-            
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    
-                    if (targetElement) {
-                        const offsetTop = targetElement.offsetTop - 80; // Account for fixed navbar
-                        window.scrollTo({
-                            top: offsetTop,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // Navbar scroll effect
-            window.addEventListener('scroll', function() {
-                const navbar = document.getElementById('main-nav');
-                if (window.scrollY > 50) {
-                    navbar.classList.add('navbar-scrolled');
-                } else {
-                    navbar.classList.remove('navbar-scrolled');
-                }
-                
-                // Update active nav link
-                updateActiveNavLink();
-                
-                // Trigger scroll animations
-                checkScrollAnimations();
-            });
-            
-            console.log('Navigation initialized');
-        }
-        
-        // Update active navigation link based on scroll position
-        function updateActiveNavLink() {
-            const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            let current = '';
-            sections.forEach(section => {
-                const element = document.getElementById(section);
-                if (element) {
-                    const rect = element.getBoundingClientRect();
-                    if (rect.top <= 100 && rect.bottom >= 100) {
-                        current = section;
-                    }
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
-            });
-        }
-        
-        // Initialize scroll animations
-        function initScrollAnimations() {
-            // Skill progress bars animation
-            const skillsSection = document.getElementById('skills');
-            let skillsAnimated = false;
-            
-            function animateSkills() {
-                if (skillsAnimated) return;
-                
-                const progressBars = document.querySelectorAll('.progress-bar');
-                progressBars.forEach(bar => {
-                    const width = bar.getAttribute('data-width');
-                    setTimeout(() => {
-                        bar.style.width = width + '%';
-                    }, 200);
-                });
-                skillsAnimated = true;
-            }
-            
-            // Check if skills section is visible
-            window.checkScrollAnimations = function() {
-                if (skillsSection) {
-                    const rect = skillsSection.getBoundingClientRect();
-                    if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-                        animateSkills();
-                    }
-                }
-            };
-        }
-        
-        // Initialize projects section
-        function initProjects() {
-            console.log('Initializing projects...');
-            
-            // Load projects from server-side data
-            setTimeout(() => {
-                loadProjects();
-                initProjectFilters();
-            }, 1000);
-        }
-        
-        // Load and display projects
-        function loadProjects() {
-            const projectsGrid = document.getElementById('projects-grid');
-            if (!projectsGrid) return;
-            
-            const projects = window.portfolioProjects || [];
-            
-            if (projects.length === 0) {
-                projectsGrid.innerHTML = `
-                    <div class="col-12 text-center">
-                        <p>No projects available at the moment.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            let projectsHTML = '';
-            
-            projects.forEach((project, index) => {
-                const category = getCategoryFromTechnologies(project.technologies);
-                
-                projectsHTML += `
-                    <div class="col-lg-4 col-md-6 mb-4 project-item" data-category="${category}" data-all="true">
-                        <div class="project-card">
-                            <div class="project-image">
-                                <div class="project-image-placeholder">
-                                    <i class="fas fa-laptop-code"></i>
-                                    <span>Project Image Coming Soon</span>
-                                </div>
-                                <div class="project-overlay">
-                                    <div class="project-links">
-                                        ${project.liveUrl ? `<a href="${project.liveUrl}" target="_blank" class="project-link" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>` : ''}
-                                        ${project.repoUrl ? `<a href="${project.repoUrl}" target="_blank" class="project-link" title="Source Code"><i class="fab fa-github"></i></a>` : ''}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="project-content">
-                                <h3 class="project-title">${project.title}</h3>
-                                <p class="project-description">${project.description}</p>
-                                <div class="project-technologies">
-                                    ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
-                                </div>
-                                <div class="project-meta">
-                                    <span class="project-date">Recent Project</span>
-                                    <span class="project-status status-completed">Completed</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            projectsGrid.innerHTML = projectsHTML;
-            console.log('Projects loaded successfully');
-        }
-        
-        // Get category from technologies
-        function getCategoryFromTechnologies(technologies) {
-            const tech = technologies.map(t => t.toLowerCase());
-            
-            if (tech.includes('android') || tech.includes('mobile')) return 'mobile';
-            if (tech.includes('photoshop') || tech.includes('illustrator') || tech.includes('figma')) return 'design';
-            return 'development';
-        }
-        
-        // Initialize project filters
-        function initProjectFilters() {
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const projectItems = document.querySelectorAll('.project-item');
-            
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const filter = this.getAttribute('data-filter');
-                    
-                    // Update active button
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Filter projects
-                    projectItems.forEach(item => {
-                        if (filter === 'all' || item.getAttribute('data-' + filter) === 'true' || item.getAttribute('data-category') === filter) {
-                            item.style.display = 'block';
-                            item.style.opacity = '0';
-                            setTimeout(() => {
-                                item.style.opacity = '1';
-                            }, 100);
-                        } else {
-                            item.style.opacity = '0';
-                            setTimeout(() => {
-                                item.style.display = 'none';
-                            }, 300);
-                        }
-                    });
-                });
-            });
-            
-            console.log('Project filters initialized');
-        }
-        
-        // Enhanced typewriter effect
-        function initTypewriter() {
-            console.log('Starting typewriter effect...');
+        // Simple typewriter function
+        function startTypewriter() {
+            console.log('=== STARTING TYPEWRITER ===');
             
             const typewriterElement = document.getElementById('typewriter');
             if (!typewriterElement) {
-                console.error('Typewriter element not found');
+                console.error('Typewriter element not found!');
                 return;
             }
             
             const roles = ['Software Developer', 'Graphics Designer', 'Problem Solver'];
-            let roleIndex = 0;
-            let charIndex = 0;
+            let currentRole = 0;
+            let currentChar = 0;
             let isDeleting = false;
             
             function type() {
-                const currentRole = roles[roleIndex];
+                const text = roles[currentRole];
                 
                 if (isDeleting) {
-                    typewriterElement.textContent = currentRole.substring(0, charIndex - 1);
-                    charIndex--;
+                    typewriterElement.textContent = text.substring(0, currentChar - 1);
+                    currentChar--;
                     
-                    if (charIndex === 0) {
+                    if (currentChar === 0) {
                         isDeleting = false;
-                        roleIndex = (roleIndex + 1) % roles.length;
+                        currentRole = (currentRole + 1) % roles.length;
                         setTimeout(type, 800);
                         return;
                     }
                     setTimeout(type, 80);
                 } else {
-                    typewriterElement.textContent = currentRole.substring(0, charIndex + 1);
-                    charIndex++;
+                    typewriterElement.textContent = text.substring(0, currentChar + 1);
+                    currentChar++;
                     
-                    if (charIndex === currentRole.length) {
+                    if (currentChar === text.length) {
                         isDeleting = true;
                         setTimeout(type, 2500);
                         return;
                     }
-                    const typingSpeed = Math.random() * 100 + 80;
-                    setTimeout(type, typingSpeed);
+                    setTimeout(type, 120);
                 }
             }
             
             setTimeout(type, 1000);
-            console.log('Typewriter effect started');
+            console.log('=== TYPEWRITER STARTED ===');
         }
         
-        // Initialize everything
-        setTimeout(hideLoadingScreen, 3000);
-        
-        window.addEventListener('load', function() {
-            console.log('Window loaded');
-            setTimeout(hideLoadingScreen, 1000);
+        // Navigation scroll effects
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('main-nav');
+            if (navbar) {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('navbar-scrolled');
+                } else {
+                    navbar.classList.remove('navbar-scrolled');
+                }
+            }
+            
+            // Skills animation
+            const skillsSection = document.getElementById('skills');
+            if (skillsSection) {
+                const rect = skillsSection.getBoundingClientRect();
+                if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                    const progressBars = document.querySelectorAll('.progress-bar');
+                    progressBars.forEach(bar => {
+                        const width = bar.getAttribute('data-width');
+                        if (width && bar.style.width !== width + '%') {
+                            bar.style.width = width + '%';
+                        }
+                    });
+                }
+            }
         });
         
-        console.log('Scripts initialized');
+        // Smooth scrolling
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+        
+        console.log('=== MASTER PAGE SCRIPTS INITIALIZED ===');
     </script>
     
-    <!-- Portfolio JavaScript -->
+    <!-- Portfolio JavaScript (backup) -->
     <script src="~/Scripts/portfolio.js"></script>
     
     <asp:PlaceHolder runat="server">
