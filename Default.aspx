@@ -283,6 +283,82 @@
         </div>
     </section>
 
+    <!-- Photography Gallery Section -->
+    <section id="photography" class="photography-section section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2 class="section-title">Photography & Creative Work</h2>
+                    <p class="section-subtitle">Capturing moments and expressing creativity through visual storytelling</p>
+                </div>
+            </div>
+            
+            <!-- Gallery Categories -->
+            <div class="row mb-5">
+                <div class="col-lg-12 text-center">
+                    <div class="gallery-filters">
+                        <button class="gallery-filter-btn active" data-category="all">All Photos</button>
+                        <button class="gallery-filter-btn" data-category="portraits">Portraits</button>
+                        <button class="gallery-filter-btn" data-category="nature">Nature</button>
+                        <button class="gallery-filter-btn" data-category="urban">Urban</button>
+                        <button class="gallery-filter-btn" data-category="events">Events</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Photography Grid -->
+            <div class="row" id="photography-grid">
+                <!-- Photos will be dynamically loaded here -->
+                <div class="col-12 text-center">
+                    <div class="gallery-loading">
+                        <i class="fas fa-camera fa-2x"></i>
+                        <p>Loading gallery...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- View More Photography -->
+            <div class="row mt-5">
+                <div class="col-lg-12 text-center">
+                    <a href="#" class="btn btn-outline-primary btn-lg" id="load-more-photos">
+                        <i class="fas fa-images"></i> Load More Photos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photography Modal -->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content bg-dark">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-white" id="photoModalLabel">Photo Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" alt="" class="img-fluid rounded">
+                    <div class="photo-details mt-3">
+                        <h6 id="modalPhotoTitle" class="text-white"></h6>
+                        <p id="modalPhotoDescription" class="text-light"></p>
+                        <div class="photo-meta">
+                            <span id="modalPhotoCategory" class="badge bg-primary me-2"></span>
+                            <span id="modalPhotoDate" class="text-muted"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-outline-light" id="prevPhoto">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <button type="button" class="btn btn-outline-light" id="nextPhoto">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Contact Preview Section -->
     <section id="contact" class="contact-preview-section">
         <div class="container">
@@ -340,4 +416,5 @@
     <link href="~/Content/css/hero.css" rel="stylesheet" />
     <link href="~/Content/css/about.css" rel="stylesheet" />
     <link href="~/Content/css/projects.css" rel="stylesheet" />
+    <link href="~/Content/css/photography.css" rel="stylesheet" />
 </asp:Content>

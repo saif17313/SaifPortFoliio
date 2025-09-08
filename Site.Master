@@ -1,36 +1,31 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SaifPortFoliio.SiteMaster" %>
+<%@ Import Namespace="System.Web.Optimization" %>
 
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Abdullah Al Saif - Software Developer, Graphics Designer & Problem Solver Portfolio" />
-    <meta name="keywords" content="Abdullah Al Saif, Portfolio, Software Developer, Graphics Designer, Programming, C++, Java, C#" />
-    <meta name="author" content="Abdullah Al Saif" />
-    
     <title><%: Page.Title %> - Abdullah Al Saif Portfolio</title>
-    
-    <!-- Favicon -->
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    
-    <!-- Bootstrap CSS -->
+
+    <!-- Bootstrap CSS (CDN) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    
-    <!-- Custom Portfolio CSS -->
-    <link href="~/Content/css/portfolio.css" rel="stylesheet" />
-    <link href="~/Content/css/loading.css" rel="stylesheet" />
-    <link href="~/Content/css/navigation.css" rel="stylesheet" />
-    
-    <!-- Custom CSS Placeholder -->
+
+    <!-- Custom CSS -->
+    <link href="<%: ResolveUrl("~/Content/css/portfolio.css") %>" rel="stylesheet" />
+    <link href="<%: ResolveUrl("~/Content/css/loading.css") %>" rel="stylesheet" />
+    <link href="<%: ResolveUrl("~/Content/css/navigation.css") %>" rel="stylesheet" />
+
+    <!-- Optional head content from pages -->
     <asp:ContentPlaceHolder ID="HeadContent" runat="server"></asp:ContentPlaceHolder>
-    
+
+    <!-- Modernizr bundle (no semicolon in WebForms expression) -->
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/modernizr") %>
     </asp:PlaceHolder>
@@ -62,32 +57,19 @@
                 <a class="navbar-brand" href="#hero">
                     <span class="brand-text">Abdullah Al Saif</span>
                 </a>
-                
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                
+
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#hero">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#about">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#skills">Skills</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#projects">Projects</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#contact">Contact</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn-admin" href="~/Admin/Login.aspx">Admin</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link active" href="#hero">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#photography">Photography</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -95,8 +77,7 @@
 
         <!-- Main Content Area -->
         <main>
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
+            <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
         </main>
 
         <!-- Footer -->
@@ -108,122 +89,63 @@
                     </div>
                     <div class="col-md-6 text-end">
                         <div class="footer-social">
-                            <a href="https://github.com/saif17313" target="_blank" class="footer-social-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="https://linkedin.com/in/abdullah-al-saif" target="_blank" class="footer-social-link">
-                                <i class="fab fa-linkedin"></i>
-                            </a>
-                            <a href="mailto:abdullah.saif@example.com" class="footer-social-link">
-                                <i class="fas fa-envelope"></i>
-                            </a>
+                            <a href="https://github.com/saif17313" target="_blank" class="footer-social-link"><i class="fab fa-github"></i></a>
+                            <a href="https://linkedin.com/in/abdullah-al-saif" target="_blank" class="footer-social-link"><i class="fab fa-linkedin"></i></a>
+                            <a href="mailto:abdullah.saif@example.com" class="footer-social-link"><i class="fas fa-envelope"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
         </footer>
-
-        <!-- Scripts Placeholder -->
-        <asp:ContentPlaceHolder ID="ScriptsContent" runat="server"></asp:ContentPlaceHolder>
     </form>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap JS (CDN) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- jQuery -->
+
+    <!-- jQuery (CDN) -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    
-    <!-- SIMPLE INLINE SOLUTION -->
+
+    <!-- Page scripts -->
     <script>
-        console.log('=== MASTER PAGE LOADED ===');
-        
-        // Force hide loading screen after 3 seconds no matter what
-        setTimeout(function() {
-            console.log('=== FORCING LOADING SCREEN HIDE ===');
-            
+        // Force hide loading screen after 3 seconds
+        setTimeout(function () {
             const loadingScreen = document.getElementById('loading-screen');
             const navigation = document.getElementById('main-nav');
-            
+
             if (loadingScreen) {
-                loadingScreen.style.opacity = '0';
-                loadingScreen.style.transition = 'opacity 0.5s ease-out';
-                
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                    console.log('=== LOADING SCREEN HIDDEN ===');
-                    
-                    // Show navigation
-                    if (navigation) {
-                        navigation.style.display = 'block';
-                        navigation.classList.add('nav-visible');
-                        console.log('=== NAVIGATION SHOWN ===');
-                    }
-                    
-                    // Start typewriter
-                    startTypewriter();
-                    
-                }, 500);
+                loadingScreen.style.display = 'none';
+                if (navigation) navigation.style.display = 'block';
+                startTypewriter();
             }
         }, 3000);
-        
-        // Simple typewriter function
+
+        // Simple typewriter
         function startTypewriter() {
-            console.log('=== STARTING TYPEWRITER ===');
-            
             const typewriterElement = document.getElementById('typewriter');
-            if (!typewriterElement) {
-                console.error('Typewriter element not found!');
-                return;
-            }
-            
-            const roles = ['Software Developer', 'Graphics Designer', 'Problem Solver'];
-            let currentRole = 0;
-            let currentChar = 0;
-            let isDeleting = false;
-            
+            if (!typewriterElement) return;
+
+            const roles = window.portfolioRoles || ['Software Developer', 'Graphics Designer', 'Problem Solver'];
+            let currentRole = 0, currentChar = 0, isDeleting = false;
+
             function type() {
                 const text = roles[currentRole];
-                
                 if (isDeleting) {
                     typewriterElement.textContent = text.substring(0, currentChar - 1);
                     currentChar--;
-                    
-                    if (currentChar === 0) {
-                        isDeleting = false;
-                        currentRole = (currentRole + 1) % roles.length;
-                        setTimeout(type, 800);
-                        return;
-                    }
+                    if (currentChar === 0) { isDeleting = false; currentRole = (currentRole + 1) % roles.length; setTimeout(type, 800); return; }
                     setTimeout(type, 80);
                 } else {
                     typewriterElement.textContent = text.substring(0, currentChar + 1);
                     currentChar++;
-                    
-                    if (currentChar === text.length) {
-                        isDeleting = true;
-                        setTimeout(type, 2500);
-                        return;
-                    }
+                    if (currentChar === text.length) { isDeleting = true; setTimeout(type, 2500); return; }
                     setTimeout(type, 120);
                 }
             }
-            
             setTimeout(type, 1000);
-            console.log('=== TYPEWRITER STARTED ===');
         }
-        
-        // Navigation scroll effects
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('main-nav');
-            if (navbar) {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('navbar-scrolled');
-                } else {
-                    navbar.classList.remove('navbar-scrolled');
-                }
-            }
-            
-            // Skills animation
+
+        // Skills animation on scroll
+        window.addEventListener('scroll', function () {
             const skillsSection = document.getElementById('skills');
             if (skillsSection) {
                 const rect = skillsSection.getBoundingClientRect();
@@ -231,38 +153,14 @@
                     const progressBars = document.querySelectorAll('.progress-bar');
                     progressBars.forEach(bar => {
                         const width = bar.getAttribute('data-width');
-                        if (width && bar.style.width !== width + '%') {
-                            bar.style.width = width + '%';
-                        }
+                        if (width && bar.style.width !== width + '%') bar.style.width = width + '%';
                     });
                 }
             }
         });
-        
-        // Smooth scrolling
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-        });
-        
-        console.log('=== MASTER PAGE SCRIPTS INITIALIZED ===');
     </script>
-    
-    <!-- Portfolio JavaScript (backup) -->
-    <script src="~/Scripts/portfolio.js"></script>
-    
-    <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
-    </asp:PlaceHolder>
+
+    <!-- If you really need a local bootstrap file instead of the CDN, use ResolveUrl (no Scripts.Render for a file path) -->
+    <!-- <script src="<%: ResolveUrl("~/Scripts/bootstrap.js") %>"></script> -->
 </body>
 </html>

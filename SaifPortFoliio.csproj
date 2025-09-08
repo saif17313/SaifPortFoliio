@@ -123,6 +123,7 @@
     <Content Include="Content\css\hero.css" />
     <Content Include="Content\css\loading.css" />
     <Content Include="Content\css\navigation.css" />
+    <Content Include="Content\css\photography.css" />
     <Content Include="Content\css\portfolio.css" />
     <Content Include="Content\css\projects.css" />
     <Content Include="Content\img\photography\pic1.jpg" />
@@ -196,7 +197,7 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Code\Db.cs" />
+    <Compile Include="App_Code\Db.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
