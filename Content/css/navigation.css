@@ -1,0 +1,201 @@
+/* =========================
+   NAVIGATION STYLES
+   ========================= */
+
+#main-nav {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    padding: 1rem 0;
+    display: none; /* Hidden initially */
+}
+
+#main-nav.nav-visible {
+    display: block;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#main-nav.navbar-scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 0.5rem 0;
+    box-shadow: 0 2px 30px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: #2563eb !important;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: #f59e0b !important;
+    transform: scale(1.05);
+}
+
+.brand-text {
+    background: linear-gradient(135deg, #2563eb, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem !important;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    color: #334155 !important;
+    position: relative;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #2563eb !important;
+    background: rgba(37, 99, 235, 0.1);
+    transform: translateY(-2px);
+}
+
+.navbar-nav .nav-link.active {
+    color: #2563eb !important;
+    background: rgba(37, 99, 235, 0.15);
+    font-weight: 600;
+}
+
+.navbar-nav .nav-link.active::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: #2563eb;
+    border-radius: 50%;
+}
+
+.btn-admin {
+    background: linear-gradient(135deg, #2563eb, #f59e0b) !important;
+    color: white !important;
+    border: none !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3) !important;
+}
+
+.btn-admin:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4) !important;
+    background: linear-gradient(135deg, #1e40af, #d97706) !important;
+}
+
+/* Mobile Navigation */
+.navbar-toggler {
+    border: none;
+    padding: 0.25rem 0.5rem;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2837, 99, 235, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* =========================
+   FOOTER STYLES
+   ========================= */
+
+.footer {
+    background: #1e293b;
+    color: white;
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+
+.footer p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.footer-social {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.footer-social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.footer-social-link:hover {
+    background: rgba(37, 99, 235, 0.8);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+
+@media (max-width: 991px) {
+    #main-nav {
+        background: rgba(255, 255, 255, 0.98);
+    }
+    
+    .navbar-nav {
+        text-align: center;
+        padding: 1rem 0;
+    }
+    
+    .navbar-nav .nav-link {
+        margin: 0.2rem 0;
+        padding: 0.8rem 1.5rem !important;
+        border-radius: 25px;
+    }
+    
+    .btn-admin {
+        margin-top: 1rem !important;
+        padding: 0.8rem 2rem !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .footer-social {
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    .footer .col-md-6 {
+        text-align: center !important;
+    }
+    
+    .brand-text {
+        font-size: 1.3rem;
+    }
+}
