@@ -261,78 +261,242 @@
 }
 
 /* =========================
-   RESPONSIVE DESIGN
+   PROJECTS SECTION THUMBNAILS
    ========================= */
 
+.project-item {
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.project-item:hover {
+    transform: translateY(-5px);
+}
+
+.project-image {
+    position: relative;
+    width: 100%;
+    height: 250px; /* Fixed height for 600x400 thumbnails */
+    overflow: hidden;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Maintains aspect ratio while filling container */
+    transition: transform 0.3s ease;
+}
+
+.project-item:hover .project-image img {
+    transform: scale(1.05);
+}
+
+/* Project thumbnails for different screen sizes */
 @media (max-width: 768px) {
-    .projects-thumbnails,
-    .photography-thumbnails {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .project-thumbnail {
-        height: 320px;
-    }
-    
-    .photo-thumbnail {
-        height: 250px;
-    }
-    
-    .photo-thumbnail-image {
-        height: 180px;
-    }
-    
-    .project-thumbnail-image {
-        height: 160px;
+    .project-image {
+        height: 200px; /* Smaller on mobile */
     }
 }
 
-@media (max-width: 576px) {
-    .projects-thumbnails,
-    .photography-thumbnails {
-        gap: 0.75rem;
-    }
-    
-    .project-thumbnail-info,
-    .photo-thumbnail-info {
-        padding: 1rem;
+@media (min-width: 1200px) {
+    .project-image {
+        height: 280px; /* Larger on desktop */
     }
 }
 
 /* =========================
-   ANIMATION DELAYS
+   PHOTOGRAPHY SECTION THUMBNAILS
    ========================= */
 
-.project-thumbnail:nth-child(1) { animation-delay: 0.1s; }
-.project-thumbnail:nth-child(2) { animation-delay: 0.2s; }
-.project-thumbnail:nth-child(3) { animation-delay: 0.3s; }
-.project-thumbnail:nth-child(4) { animation-delay: 0.4s; }
-.project-thumbnail:nth-child(5) { animation-delay: 0.5s; }
-.project-thumbnail:nth-child(6) { animation-delay: 0.6s; }
-
-.photo-thumbnail:nth-child(1) { animation-delay: 0.1s; }
-.photo-thumbnail:nth-child(2) { animation-delay: 0.2s; }
-.photo-thumbnail:nth-child(3) { animation-delay: 0.3s; }
-.photo-thumbnail:nth-child(4) { animation-delay: 0.4s; }
-.photo-thumbnail:nth-child(5) { animation-delay: 0.5s; }
-.photo-thumbnail:nth-child(6) { animation-delay: 0.6s; }
-
-/* Fade in animation */
-.project-thumbnail,
-.photo-thumbnail {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 0.8s ease-out both;
+.photo-item {
+    position: relative;
+    width: 100%;
+    height: 250px; /* Square-ish display for 400x400 thumbnails */
+    overflow: hidden;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
+.photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Perfect for square thumbnails */
+    transition: transform 0.3s ease;
+}
+
+.photo-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.photo-item:hover img {
+    transform: scale(1.1);
+}
+
+/* Photography grid for different screen sizes */
+@media (max-width: 576px) {
+    .photo-item {
+        height: 200px; /* Smaller squares on mobile */
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+}
+
+@media (min-width: 992px) {
+    .photo-item {
+        height: 280px; /* Larger squares on desktop */
     }
+}
+
+/* =========================
+   THUMBNAIL OPTIMIZATION
+   ========================= */
+
+/* Ensure images load smoothly */
+.project-image img,
+.photo-item img {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.project-image img.loaded,
+.photo-item img.loaded {
+    opacity: 1;
+}
+
+/* Loading states for thumbnails */
+.project-image::before,
+.photo-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 1;
+}
+
+.project-image.loaded::before,
+.photo-item.loaded::before {
+    display: none;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* =========================
+   RESPONSIVE THUMBNAIL GRID
+   ========================= */
+
+/* Projects - 3 columns on desktop, 2 on tablet, 1 on mobile */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Photography - 4 columns on desktop, 3 on tablet, 2 on mobile */
+.photography-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 576px) {
+    .projects-grid {
+        grid-template-columns: 1fr; /* Single column on mobile */
+        gap: 1.5rem;
+    }
+    
+    .photography-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+        gap: 1rem;
+    }
+}
+
+/* =========================
+   THUMBNAIL PLACEHOLDERS
+   ========================= */
+
+.project-placeholder,
+.photo-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.project-placeholder i,
+.photo-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+}
+
+.project-placeholder span,
+.photo-placeholder span {
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* Hide placeholders when images load */
+.project-image.loaded .project-placeholder,
+.photo-item.loaded .photo-placeholder {
+    display: none;
+}
+
+/* =========================
+   THUMBNAIL ASPECT RATIOS
+   ========================= */
+
+/* Maintain 3:2 ratio for project thumbnails */
+.project-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 66.67%; /* 3:2 aspect ratio */
+}
+
+.project-image-wrapper .project-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Maintain 1:1 ratio for photography thumbnails */
+.photo-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* 1:1 aspect ratio */
+}
+
+.photo-image-wrapper .photo-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }

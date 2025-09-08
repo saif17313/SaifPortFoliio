@@ -140,8 +140,11 @@
     <Content Include="Content\img\photography\placeholder.txt" />
     <Content Include="Content\img\profile\placeholder.txt" />
     <Content Include="Content\img\profile\profile.jpg" />
+    <Content Include="Content\img\projects\emergencyhelpline.png" />
+    <Content Include="Content\img\projects\unifiedclass.png" />
+    <Content Include="Content\img\projects\vendingmachine.png" />
     <Content Include="Content\img\projects\placeholder.txt" />
-    <Content Include="Content\img\projects\project1.jpg" />
+    <Content Include="Content\img\projects\portfolio.png" />
     <Content Include="Content\Site.css" />
     <Content Include="Dashboard.aspx" />
     <Content Include="Default.aspx" />
@@ -300,6 +303,7 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
+    <Content Include="UNREAD_MESSAGES_FEATURE_COMPLETE.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

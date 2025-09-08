@@ -461,6 +461,36 @@ namespace SaifPortFoliio   // ← IMPORTANT
             return list;
         }
 
+        public static List<Message> GetUnreadMessages()
+        {
+            var list = new List<Message>();
+            try
+            {
+                using (var cn = new SqlConnection(ConnectionString))
+                using (var cmd = new SqlCommand(
+                    "SELECT Id, Email, Message, IsRead, CreatedAt FROM dbo.Messages WHERE IsRead = 0 ORDER BY CreatedAt DESC", cn))
+                {
+                    cn.Open();
+                    using (var r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            list.Add(new Message
+                            {
+                                Id = r.GetInt32(0),
+                                Email = r.GetString(1),
+                                MessageText = r.GetString(2),
+                                IsRead = r.GetBoolean(3),
+                                CreatedAt = r.GetDateTime(4)
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { System.Diagnostics.Debug.WriteLine("GetUnreadMessages: " + ex.Message); }
+            return list;
+        }
+
         public static bool MarkMessageAsRead(int id)
         {
             try
@@ -475,6 +505,54 @@ namespace SaifPortFoliio   // ← IMPORTANT
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine("MarkMessageAsRead: " + ex.Message); }
             return false;
+        }
+
+        public static bool MarkAllMessagesAsRead()
+        {
+            try
+            {
+                using (var cn = new SqlConnection(ConnectionString))
+                using (var cmd = new SqlCommand("UPDATE dbo.Messages SET IsRead = 1 WHERE IsRead = 0", cn))
+                {
+                    cn.Open();
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+            catch (Exception ex) { System.Diagnostics.Debug.WriteLine("MarkAllMessagesAsRead: " + ex.Message); }
+            return false;
+        }
+
+        public static int InsertMessage(string email, string message)
+        {
+            try
+            {
+                using (var cn = new SqlConnection(ConnectionString))
+                using (var cmd = new SqlCommand(
+                    "INSERT INTO dbo.Messages (Email, Message, IsRead, CreatedAt) VALUES (@email, @message, 0, GETDATE()); SELECT SCOPE_IDENTITY();", cn))
+                {
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@message", message);
+                    cn.Open();
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+            catch (Exception ex) { System.Diagnostics.Debug.WriteLine("InsertMessage: " + ex.Message); }
+            return -1;
+        }
+
+        public static int GetUnreadMessageCount()
+        {
+            try
+            {
+                using (var cn = new SqlConnection(ConnectionString))
+                using (var cmd = new SqlCommand("SELECT COUNT(*) FROM dbo.Messages WHERE IsRead = 0", cn))
+                {
+                    cn.Open();
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+            catch (Exception ex) { System.Diagnostics.Debug.WriteLine("GetUnreadMessageCount: " + ex.Message); }
+            return 0;
         }
 
         public static bool DeleteMessage(int id)
