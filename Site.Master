@@ -65,7 +65,7 @@
                         <li class="nav-item"><a class="nav-link" href="#photography">Photography</a></li>
                         <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                         <li class="nav-item">
-                            <a class="nav-link admin-link" href="/AdminLogin.aspx">
+                            <a class="nav-link admin-link" href="/AdminCRUD.aspx">
                                 <i class="fas fa-cogs"></i> Admin
                             </a>
                         </li>
@@ -90,7 +90,7 @@
                         <div class="footer-social">
                             <a href="https://github.com/saif17313" target="_blank" class="footer-social-link"><i class="fab fa-github"></i></a>
                             <a href="https://linkedin.com/in/abdullah-al-saif" target="_blank" class="footer-social-link"><i class="fab fa-linkedin"></i></a>
-                            <a href="mailto:abdullah.saif@example.com" class="footer-social-link"><i class="fas fa-envelope"></i></a>
+                            <a href="mailto:abdullahalsaif17313@gmail.com" class="footer-social-link"><i class="fas fa-envelope"></i></a>
                         </div>
                     </div>
                 </div>
@@ -105,251 +105,60 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 
     <!-- Master page scripts -->
-    <script>
-        console.log('=== MASTER PAGE LOADED ===');
-
-        // Force hide loading screen after 3 seconds
-        setTimeout(function () {
-            console.log('=== FORCING LOADING SCREEN HIDE ===');
-
-            const loadingScreen = document.getElementById('loading-screen');
-            const navigation = document.getElementById('main-nav');
-
-            if (loadingScreen) {
-                loadingScreen.style.display = 'none';
-
-                if (navigation) {
-                    navigation.style.display = 'block';
-                }
-
-                // Start all dynamic content loading
-                initializeDynamicContent();
-            }
-        }, 3000);
-
-        // Initialize all dynamic content from database
-        function initializeDynamicContent() {
-            console.log('=== INITIALIZING DYNAMIC CONTENT ===');
-
-            startTypewriter();
-            setTimeout(() => loadDynamicSkills(), 1000);
-            setTimeout(() => loadProjectThumbnails(), 1500);
-            setTimeout(() => loadPhotographyThumbnails(), 2000);
-        }
-
-        // Simple typewriter function
-        function startTypewriter() {
-            const typewriterElement = document.getElementById('typewriter');
-            if (!typewriterElement) return;
-
-            const roles = window.portfolioRoles || ['Software Developer', 'Graphics Designer', 'Problem Solver'];
-
-            let currentRole = 0;
-            let currentChar = 0;
-            let isDeleting = false;
-
-            function type() {
-                const text = roles[currentRole];
-
-                if (isDeleting) {
-                    typewriterElement.textContent = text.substring(0, currentChar - 1);
-                    currentChar--;
-
-                    if (currentChar === 0) {
-                        isDeleting = false;
-                        currentRole = (currentRole + 1) % roles.length;
-                        setTimeout(type, 800);
-                        return;
-                    }
-                    setTimeout(type, 80);
-                } else {
-                    typewriterElement.textContent = text.substring(0, currentChar + 1);
-                    currentChar++;
-
-                    if (currentChar === text.length) {
-                        isDeleting = true;
-                        setTimeout(type, 2500);
-                        return;
-                    }
-                    setTimeout(type, 120);
-                }
-            }
-
-            setTimeout(type, 1000);
-        }
-
-        // Load dynamic skills from database
-        function loadDynamicSkills() {
-            const skillsGrid = document.querySelector('.skills-grid');
-            if (!skillsGrid) return;
-
-            const skills = window.portfolioSkills || [];
-            if (skills.length === 0) return;
-
-            let html = '';
-            skills.forEach(skill => {
-                html += `
-                    <div class="skill-item">
-                        <div class="skill-icon">
-                            <i class="${skill.icon}"></i>
-                        </div>
-                        <h4>${skill.name}</h4>
-                        <div class="skill-progress">
-                            <div class="progress-bar" data-width="${skill.level}"></div>
-                        </div>
-                        <span class="skill-percentage">${skill.level}%</span>
-                    </div>
-                `;
-            });
-
-            skillsGrid.innerHTML = html;
-        }
-
-        // Load project thumbnails from database
-        function loadProjectThumbnails() {
-            const projectsGrid = document.getElementById('projects-grid');
-            if (!projectsGrid) return;
-
-            const projects = window.portfolioProjects || [];
-
-            if (projects.length === 0) {
-                projectsGrid.innerHTML = `
-                    <div class="loading-placeholder">
-                        <i class="fas fa-info-circle fa-2x"></i>
-                        <p>No projects found in database.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = '';
-            projects.forEach((project) => {
-                html += `
-                    <div class="project-thumbnail">
-                        <div class="project-thumbnail-image">
-                            <img src="${project.image}" alt="${project.title}"
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                                 onload="this.style.display='block'; this.nextElementSibling.style.display='none';" />
-                            <div class="project-thumbnail-placeholder" style="display: flex;">
-                                <i class="fas fa-laptop-code"></i>
-                                <span>Project Preview</span>
-                            </div>
-                        </div>
-                        <div class="project-thumbnail-info">
-                            <h3 class="project-thumbnail-title">${project.title}</h3>
-                            <p class="project-thumbnail-description">${project.description}</p>
-                            <div class="project-thumbnail-tags">
-                                ${(project.technologies || []).map(tech => `<span class="project-tech-tag">${tech}</span>`).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            projectsGrid.innerHTML = html;
-            addProjectClickHandlers();
-        }
-
-        // Load photography thumbnails from database
-        function loadPhotographyThumbnails() {
-            const photographyGrid = document.getElementById('photography-grid');
-            if (!photographyGrid) return;
-
-            const photos = window.portfolioPhotography || [];
-
-            if (photos.length === 0) {
-                photographyGrid.innerHTML = `
-                    <div class="loading-placeholder">
-                        <i class="fas fa-camera fa-2x"></i>
-                        <p>No photos found in database.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = '';
-            photos.forEach((photo) => {
-                html += `
-                    <div class="photo-thumbnail">
-                        <div class="photo-thumbnail-image">
-                            <img src="${photo.imagePath}" alt="${photo.title}"
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                                 onload="this.style.display='block'; this.nextElementSibling.style.display='none';" />
-                            <div class="photo-thumbnail-placeholder" style="display: flex;">
-                                <i class="fas fa-camera"></i>
-                                <span>Photo Preview</span>
-                            </div>
-                        </div>
-                        <div class="photo-thumbnail-info">
-                            <h4 class="photo-thumbnail-title">${photo.title}</h4>
-                        </div>
-                    </div>
-                `;
-            });
-
-            photographyGrid.innerHTML = html;
-            addPhotoClickHandlers();
-        }
-
-        // Add click handlers for project thumbnails
-        function addProjectClickHandlers() {
-            const thumbs = document.querySelectorAll('.project-thumbnail');
-            thumbs.forEach((thumb, idx) => {
-                thumb.addEventListener('click', function () {
-                    const projects = window.portfolioProjects || [];
-                    const p = projects[idx];
-                    if (!p) return;
-                    if (p.repoUrl) window.open(p.repoUrl, '_blank');
-                    else if (p.liveUrl) window.open(p.liveUrl, '_blank');
-                });
-            });
-        }
-
-        // Add click handlers for photo thumbnails
-        function addPhotoClickHandlers() {
-            const thumbs = document.querySelectorAll('.photo-thumbnail');
-            thumbs.forEach((thumb, idx) => {
-                thumb.addEventListener('click', function () {
-                    const photos = window.portfolioPhotography || [];
-                    const photo = photos[idx];
-                    if (photo) openPhotoLightbox(photo, idx, photos);
-                });
-            });
-        }
-
-        // Open photo in lightbox
-        function openPhotoLightbox(photo) {
-            if (typeof bootstrap !== 'undefined' && document.getElementById('photoLightbox')) {
-                const modal = new bootstrap.Modal(document.getElementById('photoLightbox'));
-                document.getElementById('lightboxImage').src = photo.imagePath;
-                document.getElementById('lightboxImage').alt = photo.title;
-                document.getElementById('lightboxPhotoTitle').textContent = photo.title;
-                document.getElementById('lightboxPhotoDescription').textContent = photo.description;
-                modal.show();
-            }
-        }
-
-        // Skills animation on scroll
-        window.addEventListener('scroll', function () {
-            const skillsSection = document.getElementById('skills');
-            if (!skillsSection) return;
-
-            const rect = skillsSection.getBoundingClientRect();
-            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-                const bars = document.querySelectorAll('.progress-bar');
-                bars.forEach(bar => {
-                    const width = bar.getAttribute('data-width');
-                    if (width && bar.style.width !== width + '%') {
-                        bar.style.width = width + '%';
-                    }
-                });
-            }
-        });
-
-        console.log('=== MASTER PAGE SCRIPTS INITIALIZED ===');
-    </script>
-
-    <!-- OPTIONAL: include a local script file (no bundling) -->
-    <!-- <script src="<%: ResolveUrl("~/Scripts/bootstrap.js") %>"></script> -->
+    <script src="<%: ResolveUrl("~/Scripts/master.js") %>"></script>
 </body>
 </html>
+
+<style>
+        /* Navigation Styles */
+        .navbar {
+            padding: 1rem 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(88, 101, 242, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 20px rgba(88, 101, 242, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #5865F2 !important;
+            text-decoration: none;
+        }
+
+        .navbar-nav .nav-link {
+            color: #2D3748 !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: #5865F2 !important;
+            background: rgba(88, 101, 242, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .admin-link {
+            background: linear-gradient(135deg, #5865F2, #4752C4) !important;
+            color: white !important;
+            border-radius: 8px;
+            padding: 0.5rem 1rem !important;
+            margin-left: 1rem;
+        }
+
+        .admin-link:hover {
+            background: linear-gradient(135deg, #4752C4, #3A47B8) !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.3);
+        }
+</style>

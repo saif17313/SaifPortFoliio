@@ -19,11 +19,13 @@ VALUES
 -- =========================
 -- Roles (typewriter line)
 -- =========================
-INSERT INTO dbo.Roles (RoleText)
-VALUES
-(N'Software Developer'),
-(N'Graphics Designer'),
-(N'Problem Solver');
+INSERT INTO dbo.Roles (RoleText) VALUES 
+('Full Stack Developer'),
+('Software Engineer'),
+('Graphics Designer'),
+('Problem Solver'),
+('Web Developer'),
+('UI/UX Designer');
 
 -- =========================
 -- Skills
