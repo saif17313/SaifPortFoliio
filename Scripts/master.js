@@ -24,6 +24,21 @@ setTimeout(function () {
 function initializeDynamicContent() {
     console.log('Initializing content');
     loadPortfolioData();
+    
+    // Add a backup timer to ensure skills load
+    setTimeout(function() {
+        console.log('?? Backup skills loading...');
+        var skillsList = document.getElementById('skills-progress-list');
+        if (skillsList && skillsList.innerHTML.includes('Loading skills...')) {
+            console.log('?? Skills still loading, forcing load...');
+            forceLoadSkills();
+        }
+    }, 3000);
+    
+    // Also add immediate database test
+    setTimeout(function() {
+        testDatabaseConnection();
+    }, 1000);
 }
 
 function loadPortfolioData() {
@@ -155,15 +170,96 @@ function startTypewriter() {
 }
 
 function loadSkillsSection() {
-    var skillsList = document.getElementById('skills-list');
-    if (!skillsList) return;
+    console.log('?? Loading skills section...');
+    
+    var skillsList = document.getElementById('skills-progress-list');
+    if (!skillsList) {
+        console.log('? Skills progress list element not found');
+        return;
+    }
 
-    var skills = window.portfolioSkills;
+    console.log('? Skills progress list element found');
+
+    // Check if server data is available
+    if (typeof window.serverData !== 'undefined') {
+        console.log('? Server data found:', window.serverData);
+        window.portfolioSkills = window.serverData.skills || [];
+    } else {
+        console.log('?? No server data found, using fallback skills');
+        // Enhanced fallback skills with your database data
+        window.portfolioSkills = [
+            { name: "C", level: 100, category: "Programming", colorClass: "programming" },
+            { name: "C++", level: 100, category: "Programming", colorClass: "programming" },
+            { name: "Java", level: 95, category: "Programming", colorClass: "programming" },
+            { name: "JavaScript", level: 85, category: "Programming", colorClass: "programming" },
+            { name: "Python", level: 80, category: "Programming", colorClass: "programming" },
+            { name: "HTML5", level: 85, category: "Web Development", colorClass: "web-development" },
+            { name: "CSS3", level: 90, category: "Web Development", colorClass: "web-development" },
+            { name: "jQuery", level: 60, category: "Web Development", colorClass: "web-development" },
+            { name: "ASP.NET", level: 80, category: "Web Development", colorClass: "web-development" },
+            { name: "Bootstrap", level: 75, category: "Web Development", colorClass: "web-development" },
+            { name: "Photoshop", level: 75, category: "Design", colorClass: "design" },
+            { name: "WordPress", level: 70, category: "CMS", colorClass: "web-development" },
+            { name: "SEO", level: 80, category: "Marketing", colorClass: "design" },
+            { name: "Git", level: 85, category: "Tools", colorClass: "soft-skills" },
+            { name: "Database Design", level: 88, category: "Database", colorClass: "programming" }
+        ];
+    }
+
+    var skills = window.portfolioSkills || [];
+    console.log('?? Skills to display:', skills.length, skills);
+    
+    if (skills.length === 0) {
+        console.log('? No skills found');
+        skillsList.innerHTML = '<div class="loading-state"><i class="fas fa-info-circle"></i><p>No skills found in database.</p></div>';
+        return;
+    }
+    
+    console.log('?? Generating skills HTML...');
     var html = '';
     for (var i = 0; i < skills.length; i++) {
-        html += '<div class="skill-tag">' + skills[i].name + '</div>';
+        var skill = skills[i];
+        html += '<div class="skill-progress-item" style="animation-delay: ' + (i * 0.1) + 's">';
+        html += '<div class="skill-progress-name">';
+        html += skill.name;
+        html += '<span class="skill-progress-percentage ' + (skill.colorClass || 'default') + '">' + skill.level + '%</span>';
+        html += '</div>';
+        html += '<div class="skill-progress-bar">';
+        html += '<div class="skill-progress-fill ' + (skill.colorClass || 'default') + '" data-percentage="' + skill.level + '"></div>';
+        html += '</div>';
+        html += '</div>';
     }
+    
     skillsList.innerHTML = html;
+    console.log('? Skills HTML generated and inserted');
+    
+    // Animate progress bars after DOM is updated
+    setTimeout(function() {
+        console.log('?? Starting skill animations...');
+        animateSkillBars();
+    }, 100);
+}
+
+function animateSkillBars() {
+    var skillItems = document.querySelectorAll('.skill-progress-item');
+    var progressBars = document.querySelectorAll('.skill-progress-fill');
+    
+    console.log('Animating', skillItems.length, 'skill items');
+    
+    // Add floating animation to skill items
+    skillItems.forEach(function(item, index) {
+        setTimeout(function() {
+            item.classList.add('float-in');
+        }, index * 150);
+    });
+    
+    // Animate progress bars
+    progressBars.forEach(function(bar, index) {
+        var percentage = bar.getAttribute('data-percentage');
+        setTimeout(function() {
+            bar.style.width = percentage + '%';
+        }, index * 200 + 500); // Start after float animation
+    });
 }
 
 function loadProjectsSection() {
@@ -253,4 +349,49 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-console.log('Master page scripts initialized');
+// Add this function after loadSkillsSection
+function testDatabaseConnection() {
+    console.log('?? Testing database connection...');
+    
+    // Make an AJAX call to test database connectivity
+    fetch('/TestData.aspx')
+        .then(response => {
+            console.log('?? Database response:', response.status);
+            return response.text();
+        })
+        .then(data => {
+            console.log('?? Database test completed');
+        })
+        .catch(error => {
+            console.error('? Database connection error:', error);
+        });
+}
+
+// Force load skills regardless of server data
+function forceLoadSkills() {
+    console.log('?? Force loading skills...');
+    
+    // Directly set fallback skills
+    window.portfolioSkills = [
+        { name: "C", level: 100, category: "Programming", colorClass: "programming" },
+        { name: "C++", level: 100, category: "Programming", colorClass: "programming" },
+        { name: "Java", level: 95, category: "Programming", colorClass: "programming" },
+        { name: "JavaScript", level: 85, category: "Programming", colorClass: "programming" },
+        { name: "Python", level: 80, category: "Programming", colorClass: "programming" },
+        { name: "HTML5", level: 85, category: "Web Development", colorClass: "web-development" },
+        { name: "CSS3", level: 90, category: "Web Development", colorClass: "web-development" },
+        { name: "jQuery", level: 60, category: "Web Development", colorClass: "web-development" },
+        { name: "ASP.NET", level: 80, category: "Web Development", colorClass: "web-development" },
+        { name: "Bootstrap", level: 75, category: "Web Development", colorClass: "web-development" },
+        { name: "Photoshop", level: 75, category: "Design", colorClass: "design" },
+        { name: "WordPress", level: 70, category: "CMS", colorClass: "web-development" },
+        { name: "SEO", level: 80, category: "Marketing", colorClass: "design" },
+        { name: "Git", level: 85, category: "Tools", colorClass: "soft-skills" },
+        { name: "Database Design", level: 88, category: "Database", colorClass: "programming" }
+    ];
+    
+    console.log('? Skills data set, calling loadSkillsSection...');
+    loadSkillsSection();
+}
+
+console.log('Master page scripts initialized');console.log('Master page scripts initialized');

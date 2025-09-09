@@ -182,6 +182,7 @@
     <Content Include="PORTFOLIO_STRUCTURE_GUIDE.md" />
     <Content Include="BUILD_STATUS_RESOLVED.md" />
     <Content Include="CS2001_ERROR_RESOLVED.md" />
+    <Content Include="DATABASE_CONNECTION_STATUS.md" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -304,6 +305,8 @@
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
     <Content Include="UNREAD_MESSAGES_FEATURE_COMPLETE.md" />
+    <Content Include="SKILLS_DATABASE_DISPLAY_COMPLETE.md" />
+    <Content Include="SKILLS_LOADING_FIXED.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

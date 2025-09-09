@@ -96,6 +96,36 @@
             </div>
         </div>
 
+        <!-- Skills Management Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="skills-management-container">
+                    <div class="skills-header">
+                        <div class="skills-title">
+                            <h4><i class="fas fa-tools"></i> Skills Management</h4>
+                            <span class="skills-count" id="skillsCounter">Loading...</span>
+                        </div>
+                        <div class="skills-actions">
+                            <button class="btn btn-outline-primary btn-sm" onclick="refreshSkills()">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                            <button class="btn btn-outline-success btn-sm" onclick="showAddSkillModal()">
+                                <i class="fas fa-plus"></i> Add Skill
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="skills-list" id="skillsList">
+                        <!-- Skills will be loaded here -->
+                        <div class="loading-placeholder">
+                            <i class="fas fa-spinner fa-spin fa-2x"></i>
+                            <p>Loading skills...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Quick Actions -->
         <div class="row mt-4">
             <div class="col-12">
@@ -359,6 +389,165 @@
             background: #c82333;
         }
 
+        /* Skills Management */
+        .skills-management-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .skills-header {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .skills-title h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .skills-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+        }
+
+        .skills-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .skills-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* Individual Skill Cards */
+        .skill-item {
+            border-bottom: 1px solid #f0f0f0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .skill-item:hover {
+            background: #f8f9ff;
+        }
+
+        .skill-item:last-child {
+            border-bottom: none;
+        }
+
+        .skill-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .skill-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .skill-details {
+            flex: 1;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+        }
+
+        .skill-category {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .skill-progress-bar-small {
+            flex: 1;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-progress-fill-small {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .skill-percentage {
+            font-weight: 600;
+            color: #667eea;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .skill-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-edit {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background: #d97706;
+        }
+
+        .btn-delete-skill {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-delete-skill:hover {
+            background: #c82333;
+        }
+
         /* Loading and Empty States */
         .loading-placeholder,
         .empty-state {
@@ -439,10 +628,12 @@
     <script>
         // Global variables
         let unreadMessages = [];
+        let skillsData = [];
 
-        // Load messages when page loads
+        // Load messages and skills when page loads
         document.addEventListener('DOMContentLoaded', function() {
             loadUnreadMessages();
+            loadSkills();
         });
 
         function loadUnreadMessages() {
@@ -717,33 +908,242 @@
             showToast('Messages exported successfully!');
         }
 
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('messageToast');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            // Set color based on type
-            if (type === 'error') {
-                toast.style.background = '#dc3545';
-            } else if (type === 'warning') {
-                toast.style.background = '#ffc107';
-                toast.style.color = '#000';
-            } else {
-                toast.style.background = '#28a745';
-                toast.style.color = '#fff';
+        // Skills management functions
+        let skills = [];
+
+        function loadSkills() {
+            const skillsList = document.getElementById('skillsList');
+            const skillsCounter = document.getElementById('skillsCounter');
+            const skillCount = document.getElementById('skillCount');
+
+            // Show loading state
+            skillsList.innerHTML = `
+                <div class="loading-placeholder">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p>Loading skills...</p>
+                </div>
+            `;
+
+            // Make AJAX call to get skills
+            $.ajax({
+                type: "POST",
+                url: "AdminCRUD.aspx/GetSkills",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(response) {
+                    skills = response.d || [];
+                    displaySkills();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading skills:', error);
+                    loadSampleSkills();
+                    displaySkills();
+                }
+            });
+
+            function displaySkills() {
+                if (skills.length === 0) {
+                    skillsList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-tools fa-3x"></i>
+                            <h5>No Skills Found</h5>
+                            <p>Start by adding your first skill!</p>
+                        </div>
+                    `;
+                    skillsCounter.textContent = "0 skills";
+                    skillCount.textContent = "0";
+                    return;
+                }
+
+                let html = '';
+                skills.forEach(skill => {
+                    html += `
+                        <div class="skill-item" id="skill-${skill.id}">
+                            <div class="skill-info">
+                                <div class="skill-icon">
+                                    <i class="${getSkillIcon(skill.name)}"></i>
+                                </div>
+                                <div class="skill-details">
+                                    <div class="skill-name">${skill.name}</div>
+                                    <div class="skill-category">${skill.category || 'General'}</div>
+                                    <div class="skill-progress">
+                                        <div class="skill-progress-bar-small">
+                                            <div class="skill-progress-fill-small" style="width: ${skill.level}%"></div>
+                                        </div>
+                                        <div class="skill-percentage">${skill.level}%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="skill-actions">
+                                <button class="btn-edit" onclick="editSkill(${skill.id})">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn-delete-skill" onclick="deleteSkill(${skill.id})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                skillsList.innerHTML = html;
+                skillsCounter.textContent = `${skills.length} skill${skills.length !== 1 ? 's' : ''}`;
+                skillCount.textContent = skills.length;
             }
-            
-            toastMessage.textContent = message;
-            toast.style.display = 'flex';
-            
-            setTimeout(() => {
-                toast.style.display = 'none';
-                toast.style.color = '#fff'; // Reset color
-            }, 3000);
         }
 
-        // Load server data if available
-        if (typeof window.serverMessages !== 'undefined') {
-            unreadMessages = window.serverMessages;
+        function loadSampleSkills() {
+            // Fallback sample data
+            skills = [
+                { id: 1, name: "C", level: 100, category: "Programming" },
+                { id: 2, name: "C++", level: 100, category: "Programming" },
+                { id: 3, name: "Java", level: 95, category: "Programming" },
+                { id: 4, name: "JavaScript", level: 85, category: "Web Development" },
+                { id: 5, name: "HTML5", level: 85, category: "Web Development" },
+                { id: 6, name: "CSS3", level: 90, category: "Web Development" },
+                { id: 7, name: "Photoshop", level: 75, category: "Design" },
+                { id: 8, name: "ASP.NET", level: 80, category: "Web Development" }
+            ];
         }
+
+        function getSkillIcon(skillName) {
+            const iconMap = {
+                'Java': 'fab fa-java',
+                'C++': 'fas fa-code',
+                'C': 'fas fa-code',
+                'JavaScript': 'fab fa-js-square',
+                'HTML5': 'fab fa-html5',
+                'CSS3': 'fab fa-css3-alt',
+                'ASP.NET': 'fas fa-window-maximize',
+                'Python': 'fab fa-python',
+                'jQuery': 'fab fa-js',
+                'Bootstrap': 'fab fa-bootstrap',
+                'Photoshop': 'fab fa-adobe',
+                'WordPress': 'fab fa-wordpress',
+                'SEO': 'fas fa-search',
+                'Git': 'fab fa-git-alt',
+                'Database Design': 'fas fa-database'
+            };
+            return iconMap[skillName] || 'fas fa-cog';
+        }
+
+        function refreshSkills() {
+            loadSkills();
+            showToast('Skills refreshed!');
+        }
+
+        function editSkill(skillId) {
+            const skill = skills.find(s => s.id === skillId);
+            if (skill) {
+                showToast(`Edit skill: ${skill.name} (Feature coming soon!)`, 'warning');
+            }
+        }
+
+        function deleteSkill(skillId) {
+            const skill = skills.find(s => s.id === skillId);
+            if (skill && confirm(`Are you sure you want to delete "${skill.name}"?`)) {
+                // Make AJAX call to delete
+                $.ajax({
+                    type: "POST",
+                    url: "AdminCRUD.aspx/DeleteSkill",
+                    data: JSON.stringify({ skillId: skillId }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.d) {
+                            skills = skills.filter(s => s.id !== skillId);
+                            loadSkills();
+                            showToast(`Skill "${skill.name}" deleted successfully!`);
+                        } else {
+                            showToast('Failed to delete skill!', 'error');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error deleting skill:', error);
+                        showToast('Error connecting to server!', 'error');
+                    }
+                });
+            }
+        }
+
+        function showAddSkillModal() {
+            showToast('Add Skill feature coming soon!', 'warning');
+        }
+
+        // Load skills when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(loadSkills, 2500); // Load after messages
+        });
     </script>
+
+    <!-- Add Skill Modal -->
+    <div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSkillModalLabel"><i class="fas fa-plus"></i> Add New Skill</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addSkillForm">
+                        <div class="mb-3">
+                            <label for="skillName" class="form-label">Skill Name</label>
+                            <input type="text" class="form-control" id="skillName" name="skillName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="skillLevel" class="form-label">Skill Level</label>
+                            <select class="form-select" id="skillLevel" name="skillLevel" required>
+                                <option value="">Select level</option>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Skill
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Skill Modal -->
+    <div class="modal fade" id="editSkillModal" tabindex="-1" aria-labelledby="editSkillModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSkillModalLabel"><i class="fas fa-pencil-alt"></i> Edit Skill</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editSkillForm">
+                        <input type="hidden" id="editSkillId" name="skillId">
+                        <div class="mb-3">
+                            <label for="editSkillName" class="form-label">Skill Name</label>
+                            <input type="text" class="form-control" id="editSkillName" name="skillName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editSkillLevel" class="form-label">Skill Level</label>
+                            <select class="form-select" id="editSkillLevel" name="skillLevel" required>
+                                <option value="">Select level</option>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </asp:Content>

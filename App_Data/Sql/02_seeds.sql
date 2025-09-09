@@ -60,7 +60,20 @@ INSERT INTO dbo.Skills (Name, LevelPercent, Category)
 VALUES
 (N'C',   100, N'Programming'),
 (N'C++', 100, N'Programming'),
-(N'Java', 95,  N'Programming');
+(N'Java', 95,  N'Programming'),
+(N'Java', 95,  N'Programming'),
+(N'JavaScript', 85, N'Programming'),
+(N'Python', 80, N'Programming'),
+(N'HTML5', 85, N'Web Development'),
+(N'CSS3', 90, N'Web Development'),
+(N'jQuery', 60, N'Web Development'),
+(N'ASP.NET', 80, N'Web Development'),
+(N'Bootstrap', 75, N'Web Development'),
+(N'Photoshop', 75, N'Design'),
+(N'WordPress', 70, N'CMS'),
+(N'SEO', 80, N'Marketing'),
+(N'Git', 85, N'Tools'),
+(N'Database Design', 88, N'Database');
 
 -- =========================
 -- Photography (1:1 aspect ratio - 400x400px thumbnails)

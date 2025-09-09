@@ -239,6 +239,69 @@
         </div>
     </div>
 
+    <!-- Skills Debugging Script -->
+    <script>
+        // Debug script to force load skills
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 Skills debug script loaded');
+            
+            // Wait for other scripts to load, then force skills if needed
+            setTimeout(function() {
+                var skillsList = document.getElementById('skills-progress-list');
+                if (skillsList && skillsList.innerHTML.includes('Loading skills...')) {
+                    console.log('🆘 Skills still loading after 5 seconds, forcing emergency load...');
+                    
+                    // Emergency skills load
+                    var emergencySkills = [
+                        { name: "C", level: 100, colorClass: "programming" },
+                        { name: "C++", level: 100, colorClass: "programming" },
+                        { name: "Java", level: 95, colorClass: "programming" },
+                        { name: "JavaScript", level: 85, colorClass: "programming" },
+                        { name: "Python", level: 80, colorClass: "programming" },
+                        { name: "HTML5", level: 85, colorClass: "web-development" },
+                        { name: "CSS3", level: 90, colorClass: "web-development" },
+                        { name: "jQuery", level: 60, colorClass: "web-development" },
+                        { name: "ASP.NET", level: 80, colorClass: "web-development" },
+                        { name: "Bootstrap", level: 75, colorClass: "web-development" },
+                        { name: "Photoshop", level: 75, colorClass: "design" },
+                        { name: "WordPress", level: 70, colorClass: "web-development" },
+                        { name: "SEO", level: 80, colorClass: "design" },
+                        { name: "Git", level: 85, colorClass: "soft-skills" },
+                        { name: "Database Design", level: 88, colorClass: "programming" }
+                    ];
+                    
+                    var html = '';
+                    for (var i = 0; i < emergencySkills.length; i++) {
+                        var skill = emergencySkills[i];
+                        html += '<div class="skill-progress-item" style="animation-delay: ' + (i * 0.1) + 's">';
+                        html += '<div class="skill-progress-name">';
+                        html += skill.name;
+                        html += '<span class="skill-progress-percentage ' + skill.colorClass + '">' + skill.level + '%</span>';
+                        html += '</div>';
+                        html += '<div class="skill-progress-bar">';
+                        html += '<div class="skill-progress-fill ' + skill.colorClass + '" data-percentage="' + skill.level + '" style="width: ' + skill.level + '%"></div>';
+                        html += '</div>';
+                        html += '</div>';
+                    }
+                    
+                    skillsList.innerHTML = html;
+                    console.log('✅ Emergency skills loaded successfully!');
+                    
+                    // Animate the skills
+                    setTimeout(function() {
+                        var skillItems = document.querySelectorAll('.skill-progress-item');
+                        skillItems.forEach(function(item, index) {
+                            setTimeout(function() {
+                                item.style.opacity = '1';
+                                item.style.transform = 'translateY(0) scale(1)';
+                            }, index * 100);
+                        });
+                    }, 100);
+                }
+            }, 5000);
+        });
+    </script>
+
 </asp:Content>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">

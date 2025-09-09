@@ -42,7 +42,8 @@ namespace SaifPortFoliio
                     name = s.Name,
                     level = s.LevelPercent ?? 0,
                     category = s.Category,
-                    icon = GetSkillIcon(s.Name)
+                    icon = GetSkillIcon(s.Name),
+                    colorClass = GetSkillColorClass(s.Category)
                 }).ToList();
 
                 var jsRoles = roles.Select(r => r.RoleText).ToList();
@@ -88,15 +89,37 @@ namespace SaifPortFoliio
                 { "C++", "fas fa-code" },
                 { "C", "fas fa-code" },
                 { "JavaScript", "fab fa-js-square" },
-                { "HTML/CSS", "fab fa-html5" },
+                { "HTML5", "fab fa-html5" },
+                { "CSS3", "fab fa-css3-alt" },
                 { "ASP.NET", "fas fa-window-maximize" },
-                { "Graphics Design", "fas fa-paint-brush" },
+                { "Python", "fab fa-python" },
+                { "jQuery", "fab fa-js" },
+                { "Bootstrap", "fab fa-bootstrap" },
                 { "Photoshop", "fab fa-adobe" },
-                { "Problem Solving", "fas fa-lightbulb" },
-                { "Team Leadership", "fas fa-users" }
+                { "WordPress", "fab fa-wordpress" },
+                { "SEO", "fas fa-search" },
+                { "Git", "fab fa-git-alt" },
+                { "Database Design", "fas fa-database" }
             };
 
             return iconMap.ContainsKey(skillName) ? iconMap[skillName] : "fas fa-cog";
+        }
+
+        private string GetSkillColorClass(string category)
+        {
+            // Map categories to CSS color classes
+            var colorMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "Programming", "programming" },
+                { "Web Development", "web-development" },
+                { "Design", "design" },
+                { "Tools", "soft-skills" },
+                { "Database", "programming" },
+                { "CMS", "web-development" },
+                { "Marketing", "design" }
+            };
+
+            return colorMap.ContainsKey(category) ? colorMap[category] : "default";
         }
     }
 }
