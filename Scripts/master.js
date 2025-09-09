@@ -43,7 +43,6 @@ function initializeDynamicContent() {
 
 function loadPortfolioData() {
     // Load actual data from database via AJAX or server-side rendering
-    // For now using sample data - you can replace this with AJAX calls
     
     // Try to get data from server-side if available
     try {
@@ -53,77 +52,22 @@ function loadPortfolioData() {
             window.portfolioSkills = serverData.skills || [];
             window.portfolioRoles = serverData.roles || [];
             window.portfolioPhotography = serverData.photography || [];
+            console.log('? Server data loaded from database');
         } else {
-            // Fallback sample data
-            window.portfolioProjects = [
-                {
-                    title: "Portfolio Website",
-                    description: "A responsive portfolio website built with ASP.NET and Bootstrap showcasing my projects and skills.",
-                    image: "/Content/img/projects/portfolio.jpg",
-                    liveUrl: "https://github.com/saif17313/SaifPortFoliio",
-                    repoUrl: "https://github.com/saif17313/SaifPortFoliio"
-                },
-                {
-                    title: "E-Commerce Platform",
-                    description: "A full-featured e-commerce platform with shopping cart, payment integration, and admin panel.",
-                    image: "/Content/img/projects/ecommerce.jpg",
-                    liveUrl: "https://demo-shop.com",
-                    repoUrl: "https://github.com/saif17313/ecommerce-platform"
-                },
-                {
-                    title: "Task Management App",
-                    description: "A collaborative task management application with real-time updates and team collaboration features.",
-                    image: "/Content/img/projects/taskapp.jpg",
-                    liveUrl: "https://task-manager-demo.com",
-                    repoUrl: "https://github.com/saif17313/task-manager"
-                }
-            ];
-
-            window.portfolioSkills = [
-                { name: "Java", level: 95, icon: "fab fa-java" },
-                { name: "C++", level: 100, icon: "fas fa-code" },
-                { name: "C", level: 100, icon: "fas fa-code" },
-                { name: "JavaScript", level: 85, icon: "fab fa-js-square" },
-                { name: "HTML/CSS", level: 90, icon: "fab fa-html5" },
-                { name: "ASP.NET", level: 80, icon: "fas fa-window-maximize" },
-                { name: "Graphics Design", level: 88, icon: "fas fa-paint-brush" },
-                { name: "Photoshop", level: 85, icon: "fab fa-adobe" }
-            ];
-
-            window.portfolioRoles = [
-                "Full Stack Developer",
-                "Software Engineer", 
-                "Graphics Designer",
-                "Problem Solver",
-                "Web Developer",
-                "UI/UX Designer"
-            ];
-
-            window.portfolioPhotography = [
-                {
-                    title: "Sunset Landscape",
-                    description: "A breathtaking sunset captured during the golden hour with stunning color gradients.",
-                    imagePath: "/Content/img/photography/sunset.jpg"
-                },
-                {
-                    title: "Urban Architecture", 
-                    description: "Modern architectural photography showcasing the beauty of urban design and structures.",
-                    imagePath: "/Content/img/photography/architecture.jpg"
-                },
-                {
-                    title: "Nature Portrait",
-                    description: "A serene nature scene capturing the tranquility and beauty of the natural world.",
-                    imagePath: "/Content/img/photography/nature.jpg"
-                },
-                {
-                    title: "Street Photography",
-                    description: "Candid moments from everyday life captured through the lens of street photography.", 
-                    imagePath: "/Content/img/photography/street.jpg"
-                }
-            ];
+            console.log('? No server data available from database');
+            // Set empty arrays - no hardcoded fallback data
+            window.portfolioProjects = [];
+            window.portfolioSkills = [];
+            window.portfolioRoles = ['Software Developer', 'Graphics Designer', 'Problem Solver']; // Keep basic roles
+            window.portfolioPhotography = [];
         }
     } catch (e) {
-        console.log('Error loading server data, using fallback data');
+        console.log('? Error loading server data:', e);
+        // Set empty arrays on error
+        window.portfolioProjects = [];
+        window.portfolioSkills = [];
+        window.portfolioRoles = ['Software Developer', 'Graphics Designer', 'Problem Solver'];
+        window.portfolioPhotography = [];
     }
 
     setTimeout(function() { startTypewriter(); }, 500);
@@ -180,42 +124,26 @@ function loadSkillsSection() {
 
     console.log('? Skills progress list element found');
 
-    // Check if server data is available
-    if (typeof window.serverData !== 'undefined') {
-        console.log('? Server data found:', window.serverData);
-        window.portfolioSkills = window.serverData.skills || [];
+    // Check if server data is available from database
+    if (typeof window.serverData !== 'undefined' && window.serverData.skills) {
+        console.log('? Server data found from database:', window.serverData);
+        window.portfolioSkills = window.serverData.skills;
     } else {
-        console.log('?? No server data found, using fallback skills');
-        // Enhanced fallback skills with your database data
-        window.portfolioSkills = [
-            { name: "C", level: 100, category: "Programming", colorClass: "programming" },
-            { name: "C++", level: 100, category: "Programming", colorClass: "programming" },
-            { name: "Java", level: 95, category: "Programming", colorClass: "programming" },
-            { name: "JavaScript", level: 85, category: "Programming", colorClass: "programming" },
-            { name: "Python", level: 80, category: "Programming", colorClass: "programming" },
-            { name: "HTML5", level: 85, category: "Web Development", colorClass: "web-development" },
-            { name: "CSS3", level: 90, category: "Web Development", colorClass: "web-development" },
-            { name: "jQuery", level: 60, category: "Web Development", colorClass: "web-development" },
-            { name: "ASP.NET", level: 80, category: "Web Development", colorClass: "web-development" },
-            { name: "Bootstrap", level: 75, category: "Web Development", colorClass: "web-development" },
-            { name: "Photoshop", level: 75, category: "Design", colorClass: "design" },
-            { name: "WordPress", level: 70, category: "CMS", colorClass: "web-development" },
-            { name: "SEO", level: 80, category: "Marketing", colorClass: "design" },
-            { name: "Git", level: 85, category: "Tools", colorClass: "soft-skills" },
-            { name: "Database Design", level: 88, category: "Database", colorClass: "programming" }
-        ];
+        console.log('? No server data found from database');
+        skillsList.innerHTML = '<div class="loading-state"><i class="fas fa-exclamation-triangle"></i><p>Unable to load skills from database. Please check database connection.</p></div>';
+        return;
     }
 
     var skills = window.portfolioSkills || [];
-    console.log('?? Skills to display:', skills.length, skills);
+    console.log('?? Skills to display from database:', skills.length, skills);
     
     if (skills.length === 0) {
-        console.log('? No skills found');
+        console.log('? No skills found in database');
         skillsList.innerHTML = '<div class="loading-state"><i class="fas fa-info-circle"></i><p>No skills found in database.</p></div>';
         return;
     }
     
-    console.log('?? Generating skills HTML...');
+    console.log('?? Generating skills HTML from database...');
     var html = '';
     for (var i = 0; i < skills.length; i++) {
         var skill = skills[i];
@@ -231,7 +159,7 @@ function loadSkillsSection() {
     }
     
     skillsList.innerHTML = html;
-    console.log('? Skills HTML generated and inserted');
+    console.log('? Skills HTML generated and inserted from database');
     
     // Animate progress bars after DOM is updated
     setTimeout(function() {
@@ -347,7 +275,103 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Initialize scroll spy for navigation
+    initializeScrollSpy();
 });
+
+// Scroll spy functionality to highlight active navigation section
+function initializeScrollSpy() {
+    console.log('?? Initializing scroll spy for navigation...');
+    
+    // Get all navigation links that point to sections
+    var navLinks = document.querySelectorAll('.nav-link[href^="#"]:not(.admin-link)');
+    var sections = [];
+    
+    // Get corresponding sections
+    navLinks.forEach(function(link) {
+        var targetId = link.getAttribute('href');
+        var section = document.querySelector(targetId);
+        if (section) {
+            sections.push({
+                id: targetId,
+                element: section,
+                link: link
+            });
+        }
+    });
+
+    if (sections.length === 0) {
+        console.log('? No sections found for scroll spy');
+        return;
+    }
+
+    console.log('? Found', sections.length, 'sections for scroll spy');
+
+    // Scroll event listener with throttling
+    var isScrolling = false;
+    
+    function handleScroll() {
+        if (!isScrolling) {
+            requestAnimationFrame(function() {
+                updateActiveNavigation();
+                isScrolling = false;
+            });
+            isScrolling = true;
+        }
+    }
+
+    function updateActiveNavigation() {
+        var scrollPosition = window.pageYOffset + 100; // Offset for navbar height
+        var currentSection = null;
+
+        // Find the current section
+        for (var i = 0; i < sections.length; i++) {
+            var section = sections[i];
+            var sectionTop = section.element.offsetTop;
+            var sectionBottom = sectionTop + section.element.offsetHeight;
+
+            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                currentSection = section;
+                break;
+            }
+        }
+
+        // If no section is found, check if we're at the top (hero section)
+        if (!currentSection && scrollPosition < 200) {
+            currentSection = sections.find(s => s.id === '#hero');
+        }
+
+        // Update active navigation - ENSURE ONLY ONE ACTIVE AT A TIME
+        if (currentSection) {
+            // First, remove active class from ALL nav links (including any duplicates)
+            document.querySelectorAll('.nav-link').forEach(function(link) {
+                link.classList.remove('active');
+            });
+
+            // Then add active class ONLY to the current section's nav link
+            if (currentSection.link) {
+                currentSection.link.classList.add('active');
+                console.log('?? Active section:', currentSection.id);
+            }
+        }
+    }
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Initial setup - remove all active classes first
+    document.querySelectorAll('.nav-link').forEach(function(link) {
+        link.classList.remove('active');
+    });
+
+    // Initial check
+    setTimeout(function() {
+        updateActiveNavigation();
+    }, 1000);
+
+    console.log('? Scroll spy initialized successfully');
+}
 
 // Add this function after loadSkillsSection
 function testDatabaseConnection() {
@@ -367,31 +391,22 @@ function testDatabaseConnection() {
         });
 }
 
-// Force load skills regardless of server data
+// Force load skills from database only
 function forceLoadSkills() {
-    console.log('?? Force loading skills...');
+    console.log('?? Force loading skills from database...');
     
-    // Directly set fallback skills
-    window.portfolioSkills = [
-        { name: "C", level: 100, category: "Programming", colorClass: "programming" },
-        { name: "C++", level: 100, category: "Programming", colorClass: "programming" },
-        { name: "Java", level: 95, category: "Programming", colorClass: "programming" },
-        { name: "JavaScript", level: 85, category: "Programming", colorClass: "programming" },
-        { name: "Python", level: 80, category: "Programming", colorClass: "programming" },
-        { name: "HTML5", level: 85, category: "Web Development", colorClass: "web-development" },
-        { name: "CSS3", level: 90, category: "Web Development", colorClass: "web-development" },
-        { name: "jQuery", level: 60, category: "Web Development", colorClass: "web-development" },
-        { name: "ASP.NET", level: 80, category: "Web Development", colorClass: "web-development" },
-        { name: "Bootstrap", level: 75, category: "Web Development", colorClass: "web-development" },
-        { name: "Photoshop", level: 75, category: "Design", colorClass: "design" },
-        { name: "WordPress", level: 70, category: "CMS", colorClass: "web-development" },
-        { name: "SEO", level: 80, category: "Marketing", colorClass: "design" },
-        { name: "Git", level: 85, category: "Tools", colorClass: "soft-skills" },
-        { name: "Database Design", level: 88, category: "Database", colorClass: "programming" }
-    ];
-    
-    console.log('? Skills data set, calling loadSkillsSection...');
-    loadSkillsSection();
+    // Only load if server data is available
+    if (typeof window.serverData !== 'undefined' && window.serverData.skills) {
+        window.portfolioSkills = window.serverData.skills;
+        console.log('? Skills data loaded from database, calling loadSkillsSection...');
+        loadSkillsSection();
+    } else {
+        console.log('? No database skills available for force load');
+        var skillsList = document.getElementById('skills-progress-list');
+        if (skillsList) {
+            skillsList.innerHTML = '<div class="loading-state"><i class="fas fa-database"></i><p>Skills will load when database connection is established.</p></div>';
+        }
+    }
 }
 
-console.log('Master page scripts initialized');console.log('Master page scripts initialized');
+console.log('Master page scripts initialized');

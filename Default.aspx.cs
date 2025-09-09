@@ -18,6 +18,73 @@ namespace SaifPortFoliio
             }
         }
 
+        protected void btnSendMessage_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Validate form data - only email and message required
+                if (string.IsNullOrWhiteSpace(txtEmail.Text) || 
+                    string.IsNullOrWhiteSpace(txtMessage.Text))
+                {
+                    ShowMessage("Please fill in all required fields.", "error");
+                    return;
+                }
+
+                // Save message directly to database (email and message only)
+                string email = txtEmail.Text.Trim();
+                string message = txtMessage.Text.Trim();
+
+                int messageId = Db.InsertMessage(email, message);
+
+                if (messageId > 0)
+                {
+                    // Clear form
+                    txtEmail.Text = "";
+                    txtMessage.Text = "";
+
+                    ShowMessage("Thank you! Your message has been sent successfully. I will get back to you soon.", "success");
+                }
+                else
+                {
+                    ShowMessage("Sorry, there was an error sending your message. Please try again later.", "error");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error sending message: " + ex.Message);
+                ShowMessage("Sorry, there was an error sending your message. Please try again later.", "error");
+            }
+        }
+
+        private void ShowMessage(string message, string type)
+        {
+            messageStatus.Visible = true;
+            lblMessage.Text = message;
+            
+            if (type == "success")
+            {
+                messageStatus.Attributes["class"] = "alert alert-success";
+            }
+            else
+            {
+                messageStatus.Attributes["class"] = "alert alert-danger";
+            }
+
+            // Auto-hide message after 5 seconds using JavaScript
+            string script = @"
+                setTimeout(function() {
+                    var messageStatus = document.getElementById('" + messageStatus.ClientID + @"');
+                    if (messageStatus) {
+                        messageStatus.style.opacity = '0';
+                        setTimeout(function() {
+                            messageStatus.style.display = 'none';
+                        }, 300);
+                    }
+                }, 5000);
+            ";
+            ClientScript.RegisterStartupScript(this.GetType(), "hideMessage", script, true);
+        }
+
         private void LoadPortfolioData()
         {
             try

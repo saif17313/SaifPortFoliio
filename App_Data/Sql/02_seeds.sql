@@ -1,4 +1,4 @@
-USE SaifPortFolio;
+SUSE SaifPortFolio;
 GO
 
 BEGIN TRAN;
@@ -60,7 +60,6 @@ INSERT INTO dbo.Skills (Name, LevelPercent, Category)
 VALUES
 (N'C',   100, N'Programming'),
 (N'C++', 100, N'Programming'),
-(N'Java', 95,  N'Programming'),
 (N'Java', 95,  N'Programming'),
 (N'JavaScript', 85, N'Programming'),
 (N'Python', 80, N'Programming'),

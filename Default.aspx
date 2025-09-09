@@ -191,30 +191,66 @@
             </div>
             
             <div class="row justify-content-center">
-                <div class="col-lg-8">
+                <!-- Contact Information Section -->
+                <div class="col-lg-5 mb-4">
+                    <div class="contact-info-container">
+                        <h3 class="contact-info-title">For any information, <strong>contact me</strong></h3>
+                        
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="contact-info-content">
+                                <h4>Name</h4>
+                                <p>Abdullah Al Saif</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-info-content">
+                                <h4>Address</h4>
+                                <p>Dept. of CSE, KUET, Khulna, Bangladesh</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-info-content">
+                                <h4>Email</h4>
+                                <p>abdullahalsaif17313@gmail.com</p>
+                                <p>saif2107017@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form Section -->
+                <div class="col-lg-6">
                     <div class="contact-form-container">
-                        <form class="contact-form" id="contactForm">
+                        <h3 class="contact-form-title">Message me</h3>
+                        <div class="contact-form">
                             <div class="form-group">
-                                <label for="contactName">Name</label>
-                                <input type="text" id="contactName" name="name" class="form-control" placeholder="Enter Your Name" required />
+                                <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" placeholder="Email" TextMode="Email" required="true"></asp:TextBox>
                             </div>
                             
                             <div class="form-group">
-                                <label for="contactEmail">Email</label>
-                                <input type="email" id="contactEmail" name="email" class="form-control" placeholder="Enter Your Email" required />
+                                <asp:TextBox ID="txtMessage" runat="server" CssClass="form-control" placeholder="Message.." TextMode="MultiLine" Rows="6" required="true"></asp:TextBox>
                             </div>
                             
                             <div class="form-group">
-                                <label for="contactMessage">Message</label>
-                                <textarea id="contactMessage" name="message" class="form-control" rows="8" placeholder="Enter Your Message" required></textarea>
+                                <asp:Button ID="btnSendMessage" runat="server" CssClass="btn btn-contact" Text="Send message" OnClick="btnSendMessage_Click" />
                             </div>
                             
-                            <div class="form-group text-end">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    Submit
-                                </button>
+                            <!-- Success/Error Messages -->
+                            <div id="messageStatus" runat="server" visible="false" class="alert">
+                                <asp:Label ID="lblMessage" runat="server"></asp:Label>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -241,65 +277,73 @@
 
     <!-- Skills Debugging Script -->
     <script>
-        // Debug script to force load skills
+        // Debug script to force load skills from database
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🔧 Skills debug script loaded');
             
-            // Wait for other scripts to load, then force skills if needed
-            setTimeout(function() {
-                var skillsList = document.getElementById('skills-progress-list');
-                if (skillsList && skillsList.innerHTML.includes('Loading skills...')) {
-                    console.log('🆘 Skills still loading after 5 seconds, forcing emergency load...');
-                    
-                    // Emergency skills load
-                    var emergencySkills = [
-                        { name: "C", level: 100, colorClass: "programming" },
-                        { name: "C++", level: 100, colorClass: "programming" },
-                        { name: "Java", level: 95, colorClass: "programming" },
-                        { name: "JavaScript", level: 85, colorClass: "programming" },
-                        { name: "Python", level: 80, colorClass: "programming" },
-                        { name: "HTML5", level: 85, colorClass: "web-development" },
-                        { name: "CSS3", level: 90, colorClass: "web-development" },
-                        { name: "jQuery", level: 60, colorClass: "web-development" },
-                        { name: "ASP.NET", level: 80, colorClass: "web-development" },
-                        { name: "Bootstrap", level: 75, colorClass: "web-development" },
-                        { name: "Photoshop", level: 75, colorClass: "design" },
-                        { name: "WordPress", level: 70, colorClass: "web-development" },
-                        { name: "SEO", level: 80, colorClass: "design" },
-                        { name: "Git", level: 85, colorClass: "soft-skills" },
-                        { name: "Database Design", level: 88, colorClass: "programming" }
-                    ];
-                    
-                    var html = '';
-                    for (var i = 0; i < emergencySkills.length; i++) {
-                        var skill = emergencySkills[i];
-                        html += '<div class="skill-progress-item" style="animation-delay: ' + (i * 0.1) + 's">';
-                        html += '<div class="skill-progress-name">';
-                        html += skill.name;
-                        html += '<span class="skill-progress-percentage ' + skill.colorClass + '">' + skill.level + '%</span>';
-                        html += '</div>';
-                        html += '<div class="skill-progress-bar">';
-                        html += '<div class="skill-progress-fill ' + skill.colorClass + '" data-percentage="' + skill.level + '" style="width: ' + skill.level + '%"></div>';
-                        html += '</div>';
-                        html += '</div>';
+            // Check if server data is available
+            if (window.serverData && window.serverData.skills) {
+                console.log('✅ Server skills data found, loading from database...');
+                loadSkillsFromServer();
+            } else {
+                console.log('⚠️ No server skills data, waiting for database...');
+                // Wait for server data to load
+                setTimeout(function() {
+                    if (window.serverData && window.serverData.skills) {
+                        loadSkillsFromServer();
+                    } else {
+                        console.log('❌ Database skills not available after 5 seconds');
+                        showSkillsError();
                     }
-                    
-                    skillsList.innerHTML = html;
-                    console.log('✅ Emergency skills loaded successfully!');
-                    
-                    // Animate the skills
-                    setTimeout(function() {
-                        var skillItems = document.querySelectorAll('.skill-progress-item');
-                        skillItems.forEach(function(item, index) {
-                            setTimeout(function() {
-                                item.style.opacity = '1';
-                                item.style.transform = 'translateY(0) scale(1)';
-                            }, index * 100);
-                        });
-                    }, 100);
-                }
-            }, 5000);
+                }, 5000);
+            }
         });
+
+        function loadSkillsFromServer() {
+            var skillsList = document.getElementById('skills-progress-list');
+            if (!skillsList) return;
+
+            var skills = window.serverData.skills;
+            if (!skills || skills.length === 0) {
+                showSkillsError();
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < skills.length; i++) {
+                var skill = skills[i];
+                html += '<div class="skill-progress-item" style="animation-delay: ' + (i * 0.1) + 's">';
+                html += '<div class="skill-progress-name">';
+                html += skill.name;
+                html += '<span class="skill-progress-percentage ' + skill.colorClass + '">' + skill.level + '%</span>';
+                html += '</div>';
+                html += '<div class="skill-progress-bar">';
+                html += '<div class="skill-progress-fill ' + skill.colorClass + '" data-percentage="' + skill.level + '" style="width: ' + skill.level + '%"></div>';
+                html += '</div>';
+                html += '</div>';
+            }
+            
+            skillsList.innerHTML = html;
+            console.log('✅ Database skills loaded successfully! Count:', skills.length);
+            
+            // Animate the skills
+            setTimeout(function() {
+                var skillItems = document.querySelectorAll('.skill-progress-item');
+                skillItems.forEach(function(item, index) {
+                    setTimeout(function() {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0) scale(1)';
+                    }, index * 100);
+                });
+            }, 100);
+        }
+
+        function showSkillsError() {
+            var skillsList = document.getElementById('skills-progress-list');
+            if (skillsList) {
+                skillsList.innerHTML = '<div class="loading-state"><i class="fas fa-exclamation-triangle fa-2x"></i><p>Unable to load skills from database.</p></div>';
+            }
+        }
     </script>
 
 </asp:Content>
@@ -502,7 +546,7 @@
         .section-title {
             font-size: 2.5rem;
             font-weight: 700;
-            color: var(--text-dark);
+            color: var,--text-dark);
             margin-bottom: 1rem;
         }
 
@@ -516,7 +560,7 @@
 
         .section-subtitle {
             font-size: 1.1rem;
-            color: var(--text-light);
+            color: var,--text-light);
             line-height: 1.8;
             max-width: 800px;
             margin: 0 auto;
@@ -526,14 +570,14 @@
         .about-subtitle {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--text-dark);
+            color: var,--text-dark);
             margin-bottom: 2rem;
         }
 
         .about-text {
             font-size: 1.1rem;
             line-height: 1.8;
-            color: var(--text-light);
+            color: var,--text-light);
             margin-bottom: 1.5rem;
         }
 
@@ -584,7 +628,7 @@
         .skill-progress-name {
             font-size: 1.2rem;
             font-weight: 600;
-            color: var(--text-dark);
+            color: var,--text-dark);
             margin-bottom: 0.8rem;
             display: flex;
             justify-content: space-between;
@@ -730,7 +774,7 @@
         .project-content p {
             font-size: 1.1rem;
             line-height: 1.8;
-            color: var(--text-light);
+            color: var,--text-light);
             margin-bottom: 2rem;
         }
 
@@ -821,24 +865,91 @@
             text-align: center;
         }
 
-        /* Contact Form */
+        /* Contact Information Section */
+        .contact-info-container {
+            padding: 1.5rem 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(88, 101, 242, 0.08);
+            margin-bottom: 2rem;
+            height: fit-content;
+        }
+
+        .contact-info-title {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .contact-info-title strong {
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem 0;
+        }
+
+        .contact-info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-info-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .contact-info-icon i {
+            font-size: 1.1rem;
+            color: var(--white);
+        }
+
+        .contact-info-content {
+            flex: 1;
+        }
+
+        .contact-info-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-info-content p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.4;
+            margin-bottom: 0.2rem;
+        }
+
+        /* Contact Form Section */
         .contact-form-container {
             background: var(--white);
-            padding: 50px;
+            padding: 2rem;
             border-radius: 16px;
-            box-shadow: 0 20px 50px rgba(88, 101, 242, 0.08);
+            box-shadow: 0 10px 30px rgba(88, 101, 242, 0.08);
+        }
+
+        .contact-form-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
         }
 
         .form-group {
-            margin-bottom: 30px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 10px;
-            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-control {
@@ -848,12 +959,78 @@
             border-radius: 8px;
             font-size: 1rem;
             transition: all 0.3s ease;
+            background: var(--white);
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        .btn-contact {
+            background: var(--text-dark);
+            color: var(--white);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-contact:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(88, 101, 242, 0.3);
+        }
+
+        /* Contact Form Alert Messages */
+        .alert {
+            padding: 1rem 1.5rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .btn-contact:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Form Validation States */
+        .form-control:invalid {
+            border-color: #dc3545;
+        }
+
+        .form-control:valid {
+            border-color: #28a745;
         }
 
         .loading-state {
@@ -898,12 +1075,49 @@
                 order: 2;
             }
 
+            .project-image img {
+                height: 200px;
+            }
+
+            .project-placeholder {
+                height: 200px;
+            }
+
             .photography-container {
                 grid-template-columns: 1fr;
             }
 
+            .contact-info-container {
+                padding: 1rem 0 2rem;
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+
+            .contact-info-title {
+                font-size: 1.4rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .contact-info-item {
+                justify-content: center;
+                text-align: center;
+                margin-bottom: 1.2rem;
+                padding: 0.3rem 0;
+            }
+
+            .contact-info-icon {
+                margin-right: 0.8rem;
+                width: 40px;
+                height: 40px;
+            }
+
             .contact-form-container {
-                padding: 30px 20px;
+                padding: 2rem 1.5rem;
+            }
+
+            .contact-form-title {
+                font-size: 1.5rem;
+                text-align: center;
             }
 
             .skills-progress-grid {

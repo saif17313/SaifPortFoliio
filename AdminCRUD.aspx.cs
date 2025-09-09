@@ -153,6 +153,42 @@ namespace SaifPortFoliio
             }
         }
 
+        // Web method to get skills
+        [WebMethod]
+        public static object GetSkills()
+        {
+            try
+            {
+                var skills = Db.GetAllSkills();
+                return skills.Select(s => new {
+                    id = s.Id,
+                    name = s.Name,
+                    level = s.LevelPercent ?? 0,
+                    category = s.Category
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error getting skills: " + ex.Message);
+                return new List<object>();
+            }
+        }
+
+        // Web method to delete skill
+        [WebMethod]
+        public static bool DeleteSkill(int skillId)
+        {
+            try
+            {
+                return Db.DeleteSkill(skillId);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error deleting skill: " + ex.Message);
+                return false;
+            }
+        }
+
         // Static helper methods for web methods
         private static string GetSenderNameStatic(string email)
         {
