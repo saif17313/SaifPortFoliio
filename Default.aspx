@@ -45,7 +45,7 @@
                 <div class="col-lg-6 order-1 order-lg-2">
                     <div class="hero-image">
                         <div class="profile-container">
-                            <img src="/Content/img/profile/profile.jpg" alt="Abdullah Al Saif" class="profile-image"
+                            <img src="/Content/img/profile/dp.png" alt="Abdullah Al Saif" class="profile-image"
                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                                  onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
                             <div class="profile-placeholder">
@@ -429,7 +429,7 @@
 
         .btn-primary:hover {
             background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
+            border-color: var,--secondary-color);
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(88, 101, 242, 0.3);
         }
@@ -442,8 +442,8 @@
 
         .btn-outline-primary:hover {
             background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: var(--white);
+            border-color: var,--primary-color);
+            color: var,--white);
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(88, 101, 242, 0.3);
         }
@@ -459,7 +459,7 @@
             line-height: 50px;
             text-align: center;
             background: var(--section-bg);
-            color: var(--text-dark);
+            color: var,--text-dark);
             border-radius: 50%;
             margin-right: 15px;
             font-size: 1.5rem;
@@ -469,48 +469,66 @@
 
         .social-link:hover {
             background: var(--primary-color);
-            color: var(--white);
+            color: var,--white);
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(88, 101, 242, 0.3);
         }
 
-        /* Profile Image */
+        /* Profile Image with Larger Frame */
         .hero-image {
             text-align: center;
+            position: relative;
         }
 
         .profile-container {
             position: relative;
-            width: 350px;
-            height: 350px;
+            width: 420px;
+            height: 420px;
             margin: 0 auto;
         }
 
-        .profile-image {
+        /* Blue circular background - larger */
+        .profile-container::before {
+            content: '';
+            position: absolute;
+            top: -25px;
+            right: -25px;
             width: 100%;
             height: 100%;
+            background: linear-gradient(135deg, #5865F2, #4752C4);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .profile-image {
+            position: relative;
+            width: 370px;
+            height: 370px;
             object-fit: cover;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(88, 101, 242, 0.15);
-            border: 4px solid var(--light-blue);
+            border-radius: 50%;
+            border: 5px solid var(--white);
+            box-shadow: 0 25px 50px rgba(88, 101, 242, 0.2);
+            z-index: 2;
+            margin: 25px;
         }
 
         .profile-placeholder {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 25px;
+            left: 25px;
+            width: 370px;
+            height: 370px;
             background: linear-gradient(135deg, var(--light-blue), #F0F7FF);
-            border-radius: 20px;
+            border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             color: var(--primary-color);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             display: none;
-            border: 4px solid var(--light-blue);
+            border: 5px solid var(--white);
+            z-index: 2;
         }
 
         .profile-placeholder i {
@@ -792,6 +810,7 @@
 
         .project-links a:hover {
             background: var(--secondary-color);
+            color: var(--white);
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(88, 101, 242, 0.3);
         }
@@ -928,7 +947,7 @@
 
         .contact-info-content p {
             font-size: 0.95rem;
-            color: var(--text-light);
+            color: var,--text-light);
             line-height: 1.4;
             margin-bottom: 0.2rem;
         }
@@ -974,8 +993,8 @@
         }
 
         .btn-contact {
-            background: var(--text-dark);
-            color: var(--white);
+            background: var(--primary-color);
+            color: var,--white);
             border: none;
             padding: 15px 40px;
             border-radius: 25px;
@@ -986,7 +1005,7 @@
         }
 
         .btn-contact:hover {
-            background: var(--primary-color);
+            background: var(--secondary-color);
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(88, 101, 242, 0.3);
         }
@@ -1057,8 +1076,26 @@
             }
 
             .profile-container {
-                width: 250px;
-                height: 250px;
+                width: 320px;
+                height: 320px;
+            }
+
+            .profile-container::before {
+                top: -20px;
+                right: -20px;
+            }
+
+            .profile-image {
+                width: 270px;
+                height: 270px;
+                margin: 25px;
+            }
+
+            .profile-placeholder {
+                top: 25px;
+                left: 25px;
+                width: 270px;
+                height: 270px;
             }
 
             .project-item {

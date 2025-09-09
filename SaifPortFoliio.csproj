@@ -135,9 +135,14 @@
     <Content Include="Content\css\portfolio.css" />
     <Content Include="Content\css\projects.css" />
     <Content Include="Content\css\thumbnails.css" />
-    <Content Include="Content\img\photography\pic1.jpg" />
-    <Content Include="Content\img\photography\pic2.jpg" />
+    <Content Include="Content\img\photography\pic1.png" />
+    <Content Include="Content\img\photography\pic2.png" />
+    <Content Include="Content\img\photography\pic3.png" />
+    <Content Include="Content\img\photography\pic4.png" />
+    <Content Include="Content\img\photography\pic5.png" />
+    <Content Include="Content\img\photography\pic6.png" />
     <Content Include="Content\img\photography\placeholder.txt" />
+    <Content Include="Content\img\profile\dp.png" />
     <Content Include="Content\img\profile\placeholder.txt" />
     <Content Include="Content\img\profile\profile.jpg" />
     <Content Include="Content\img\projects\emergencyhelpline.png" />
@@ -187,6 +192,8 @@
     <Content Include="FORM_TAG_ERROR_RESOLVED.md" />
     <Content Include="CONTACT_FORM_SIMPLIFIED.md" />
     <Content Include="CONTACT_SECTION_HEIGHT_OPTIMIZED.md" />
+    <Content Include="PROFILE_IMAGE_UPDATED_DP.md" />
+    <Content Include="PROFILE_FRAME_ENLARGED_SUMMARY.md" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
