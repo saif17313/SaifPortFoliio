@@ -1222,5 +1222,151 @@
                 margin-bottom: 2rem;
             }
         }
+
+        /* Photography Section - Project-like Layout */
+        .photography-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .photo-card {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(88, 101, 242, 0.15);
+        }
+
+        .photo-image-container {
+            position: relative;
+            overflow: hidden;
+            height: 250px;
+            flex-shrink: 0;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, var(--light-blue), #F0F7FF);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .photo-placeholder i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
+            color: white;
+            padding: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            opacity: 0;
+        }
+
+        .photo-card:hover .photo-overlay {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .photo-overlay h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .photo-overlay p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin: 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .photo-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .photo-content h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .photo-content p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-light);
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        /* Photography Section - Responsive Adjustments */
+        @media (max-width: 576px) {
+            .photography-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+
+            .photo-card {
+                margin-bottom: 1.5rem;
+            }
+
+            .photo-image-container {
+                height: 200px;
+            }
+
+            .photo-placeholder {
+                height: 200px;
+            }
+
+            .photo-overlay {
+                padding: 1rem;
+            }
+
+            .photo-overlay h4 {
+                font-size: 1.1rem;
+            }
+
+            .photo-overlay p {
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </asp:Content>

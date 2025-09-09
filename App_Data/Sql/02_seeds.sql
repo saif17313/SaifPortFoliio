@@ -79,12 +79,24 @@ VALUES
 -- =========================
 INSERT INTO dbo.Photography (Name, [Description], ImagePath)
 VALUES
-(N'Sunlit Ground',
- N'A low-angle golden-hour scene where sharp grass blades lead to palm silhouettes and a hazy urban skyline—contrasting intimate ground detail with a soft city backdrop.',
- N'/Content/img/photography/pic1-400x400.jpg'),  -- Updated with dimension hint
-(N'Crimson Core',
- N'A dramatic macro of a hibiscus, its velvety petals and upright stigma glowing in late-afternoon light against a calm, dark-green background.',
- N'/Content/img/photography/pic2-400x400.jpg');  -- Updated with dimension hint
+(N'Blossom in Focus',
+ N'A hibiscus bloom captured in warm light, its delicate textures and vibrant center standing out against a dark background.',
+ N'/Content/img/photography/pic1.png'),  -- Updated with dimension hint
+(N'Twilight Reflections',
+ N'A calm river at dusk, where fading sunlight meets the stillness of silhouetted boats and deep blue skies.',
+ N'/Content/img/photography/pic2.png'),
+ (N'Evening in Violet Hues',
+ N'Beneath a fading sky brushed with lavender and rose, the pavilion rests in silence — a gentle pause between day and night.',
+ N'/Content/img/photography/pic3.png'),
+ (N'Moon Veiled in Clouds',
+ N'A night sky textured with drifting clouds, softly illuminated by the hidden glow of the moon.',
+ N'/Content/img/photography/pic4.png'),
+ (N'Golden Horizon',
+ N'The sun sets over calm waters, its golden light reflecting gently across rippling waves.',
+ N'/Content/img/photography/pic5.png'),
+ (N'Flames of Serenity',
+ N'A night sky textured with drifting clouds, softly illuminated by the hidden glow of the moon.',
+ N'/Content/img/photography/pic6.png');
 
 COMMIT TRAN;
 GO

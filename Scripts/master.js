@@ -266,30 +266,68 @@ function loadPhotographySection() {
     if (!photographyContainer) return;
 
     var photos = window.portfolioPhotography;
+    if (!photos || photos.length === 0) {
+        photographyContainer.innerHTML = '<div class="loading-state"><i class="fas fa-exclamation-triangle"></i><p>No photos found in database.</p></div>';
+        return;
+    }
+
     var html = '';
 
     for (var i = 0; i < photos.length; i++) {
         var photo = photos[i];
-        html += '<div class="photo-item" onclick="openPhotoModal(\'' + photo.imagePath + '\', \'' + photo.title + '\', \'' + photo.description + '\')">';
-        html += '<img src="' + photo.imagePath + '" alt="' + photo.title + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';" />';
-        html += '<div class="photo-placeholder"><i class="fas fa-camera"></i><span>Photo</span></div>';
-        html += '<div class="photo-overlay"><h4>' + photo.title + '</h4></div>';
+        html += '<div class="photo-card" onclick="openPhotoModal(' + photo.id + ')">';
+        
+        // Photo image with overlay
+        html += '<div class="photo-image-container">';
+        if (photo.imagePath && photo.imagePath !== '') {
+            html += '<img src="' + photo.imagePath + '" alt="' + photo.title + '" />';
+            
+            // Floating description overlay
+            html += '<div class="photo-overlay">';
+            html += '<h4>' + photo.title + '</h4>';
+            if (photo.description && photo.description !== '') {
+                html += '<p>' + photo.description + '</p>';
+            }
+            html += '</div>';
+        } else {
+            html += '<div class="photo-placeholder">';
+            html += '<i class="fas fa-camera"></i>';
+            html += '<span>Photo Image</span>';
+            html += '</div>';
+        }
+        html += '</div>';
+        
+        // Photo content (title and description)
+        html += '<div class="photo-content">';
+        html += '<h3>' + photo.title + '</h3>';
+        if (photo.description && photo.description !== '') {
+            html += '<p>' + photo.description + '</p>';
+        }
+        html += '</div>';
+        
         html += '</div>';
     }
 
-    photographyContainer.innerHTML = html || '<div class="loading-state"><i class="fas fa-camera"></i><p>No photos found.</p></div>';
+    photographyContainer.innerHTML = html;
+    console.log('? Photography loaded from database with hover effects. Count:', photos.length);
 }
 
-function openPhotoModal(imagePath, title, description) {
-    var modal = document.getElementById('photoModal');
-    if (modal && typeof bootstrap !== 'undefined') {
-        document.getElementById('modalImage').src = imagePath;
-        document.getElementById('photoModalTitle').textContent = title;
-        document.getElementById('modalDescription').textContent = description;
-        
-        var modalInstance = new bootstrap.Modal(modal);
-        modalInstance.show();
-    }
+function openPhotoModal(photoId) {
+    var photos = window.portfolioPhotography;
+    if (!photos) return;
+    
+    var photo = photos.find(function(p) { return p.id === photoId; });
+    if (!photo) return;
+    
+    // Update modal content
+    document.getElementById('photoModalTitle').textContent = photo.title;
+    document.getElementById('modalImage').src = photo.imagePath;
+    document.getElementById('modalImage').alt = photo.title;
+    document.getElementById('modalDescription').textContent = photo.description || '';
+    
+    // Show modal using Bootstrap
+    var modal = new bootstrap.Modal(document.getElementById('photoModal'));
+    modal.show();
 }
 
 // Initialize contact form and navigation when DOM is ready
