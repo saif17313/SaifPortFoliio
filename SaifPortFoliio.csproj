@@ -142,6 +142,7 @@
     <Content Include="Content\img\photography\pic5.png" />
     <Content Include="Content\img\photography\pic6.png" />
     <Content Include="Content\img\photography\placeholder.txt" />
+    <Content Include="Content\img\profile\aboutme.png" />
     <Content Include="Content\img\profile\dp.png" />
     <Content Include="Content\img\profile\placeholder.txt" />
     <Content Include="Content\img\profile\profile.jpg" />

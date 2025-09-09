@@ -69,8 +69,22 @@
                 </div>
             </div>
             
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
+            <div class="row align-items-center">
+                <!-- About Image Section -->
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <div class="about-image">
+                        <img src="/Content/img/profile/aboutme.png" alt="Abdullah Al Saif - About Me" class="about-img"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                             onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
+                        <div class="about-img-placeholder">
+                            <i class="fas fa-user-circle"></i>
+                            <span>About Me Photo</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- About Content Section -->
+                <div class="col-lg-7">
                     <div class="about-content">
                         <h3 class="about-subtitle">Get to know me!</h3>
                         <p class="about-text">
@@ -312,13 +326,15 @@
             var html = '';
             for (var i = 0; i < skills.length; i++) {
                 var skill = skills[i];
-                html += '<div class="skill-progress-item" style="animation-delay: ' + (i * 0.1) + 's">';
+                var colorClass = getSkillColorClass(skill.category);
+                
+                html += '<div class="skill-progress-item" style="animation-delay: ' + (i * 0.2) + 's">';
                 html += '<div class="skill-progress-name">';
                 html += skill.name;
-                html += '<span class="skill-progress-percentage ' + skill.colorClass + '">' + skill.level + '%</span>';
+                html += '<span class="skill-progress-percentage ' + colorClass + '">' + skill.level + '%</span>';
                 html += '</div>';
                 html += '<div class="skill-progress-bar">';
-                html += '<div class="skill-progress-fill ' + skill.colorClass + '" data-percentage="' + skill.level + '" style="width: ' + skill.level + '%"></div>';
+                html += '<div class="skill-progress-fill ' + colorClass + '" data-percentage="' + skill.level + '"></div>';
                 html += '</div>';
                 html += '</div>';
             }
@@ -326,23 +342,46 @@
             skillsList.innerHTML = html;
             console.log('✅ Database skills loaded successfully! Count:', skills.length);
             
-            // Animate the skills
+            // Start floating animations
             setTimeout(function() {
-                var skillItems = document.querySelectorAll('.skill-progress-item');
-                skillItems.forEach(function(item, index) {
-                    setTimeout(function() {
-                        item.style.opacity = '1';
-                        item.style.transform = 'translateY(0) scale(1)';
-                    }, index * 100);
-                });
+                animateSkillsWithFloating();
             }, 100);
         }
 
-        function showSkillsError() {
-            var skillsList = document.getElementById('skills-progress-list');
-            if (skillsList) {
-                skillsList.innerHTML = '<div class="loading-state"><i class="fas fa-exclamation-triangle fa-2x"></i><p>Unable to load skills from database.</p></div>';
-            }
+        function getSkillColorClass(category) {
+            if (!category) return 'default';
+            
+            var cat = category.toLowerCase();
+            if (cat.includes('programming')) return 'programming';
+            if (cat.includes('web')) return 'web-development';
+            if (cat.includes('design')) return 'design';
+            if (cat.includes('tools')) return 'tools';
+            if (cat.includes('database')) return 'database';
+            if (cat.includes('marketing')) return 'marketing';
+            if (cat.includes('cms')) return 'cms';
+            return 'default';
+        }
+
+        function animateSkillsWithFloating() {
+            var skillItems = document.querySelectorAll('.skill-progress-item');
+            var progressBars = document.querySelectorAll('.skill-progress-fill');
+            
+            console.log('🎯 Starting floating animations for', skillItems.length, 'skills');
+            
+            // Animate skill items with floating effect
+            skillItems.forEach(function(item, index) {
+                setTimeout(function() {
+                    item.classList.add('float-in');
+                }, index * 150);
+            });
+            
+            // Animate progress bars after floating animation
+            progressBars.forEach(function(bar, index) {
+                var percentage = bar.getAttribute('data-percentage');
+                setTimeout(function() {
+                    bar.style.width = percentage + '%';
+                }, index * 200 + 800); // Start after floating animations
+            });
         }
     </script>
 
@@ -458,8 +497,8 @@
             height: 50px;
             line-height: 50px;
             text-align: center;
-            background: var(--section-bg);
-            color: var,--text-dark);
+            background: #f8f9fa;
+            color: #2D3748;
             border-radius: 50%;
             margin-right: 15px;
             font-size: 1.5rem;
@@ -468,13 +507,13 @@
         }
 
         .social-link:hover {
-            background: var(--primary-color);
-            color: var,--white);
+            background: #e9ecef;
+            color: #1a1a1a;
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(88, 101, 242, 0.3);
+            box-shadow: 0 8px 20px rgba(45, 55, 72, 0.2);
         }
 
-        /* Profile Image with Larger Frame */
+        /* Hero Image Profile Styles Enhancement */
         .hero-image {
             text-align: center;
             position: relative;
@@ -536,27 +575,48 @@
             margin-bottom: 1rem;
         }
 
-        /* Section Styles */
-        .about-section, .projects-section, .photography-section, .contact-section {
-            padding: 100px 0;
-        }
-
+        /* About Section */
         .about-section {
             background: var(--section-bg);
         }
 
+        .about-subtitle {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Skills Section */
         .skills-section {
             background: var(--white);
         }
 
+        .skills-subtitle {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        /* Projects Section */
         .projects-section {
             background: var(--section-bg);
         }
 
+        /* Photography Section */
         .photography-section {
             background: var(--white);
         }
 
+        /* Contact Section */
         .contact-section {
             background: var(--section-bg);
         }
@@ -578,310 +638,54 @@
 
         .section-subtitle {
             font-size: 1.1rem;
-            color: var,--text-light);
+            color: var(--text-light);
             line-height: 1.8;
             max-width: 800px;
             margin: 0 auto;
         }
 
-        /* About Section */
-        .about-subtitle {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var,--text-dark);
-            margin-bottom: 2rem;
-        }
-
-        .about-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var,--text-light);
-            margin-bottom: 1.5rem;
-        }
-
-        /* Skills Section */
-        .skills-subtitle {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var,--text-dark);
-            margin-bottom: 2rem;
-        }
-
-        /* Skills Progress Bars with Enhanced Floating Animation - Matching Reference Image */
-        .skills-progress-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2.5rem;
-            margin-top: 3rem;
-            padding: 1rem 0;
-        }
-
-        .skill-progress-item {
-            opacity: 0;
-            transform: translateY(50px) scale(0.9);
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-bottom: 1.5rem;
-        }
-
-        /* Enhanced floating animation keyframes matching the reference */
-        @keyframes skillFloatIn {
-            0% {
-                opacity: 0;
-                transform: translateY(60px) scale(0.8) rotate(-3deg);
-            }
-            50% {
-                opacity: 0.8;
-                transform: translateY(-8px) scale(1.02) rotate(1deg);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1) rotate(0deg);
-            }
-        }
-
-        .skill-progress-item.float-in {
-            animation: skillFloatIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        .skill-progress-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var,--text-dark);
-            margin-bottom: 0.8rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .skill-progress-percentage {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-left: 1rem;
-        }
-
-        .skill-progress-bar {
-            height: 10px;
-            background: #f0f0f0;
-            border-radius: 20px;
-            overflow: hidden;
+        /* About Image Styles */
+        .about-image {
+            text-align: center;
             position: relative;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .skill-progress-fill {
-            height: 100%;
-            border-radius: 20px;
-            transition: width 2s ease-in-out;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Colors matching the reference image */
-        .skill-progress-fill.programming {
-            background: linear-gradient(90deg, #4285F4, #6FA8F7);
-        }
-
-        .skill-progress-fill.web-development {
-            background: linear-gradient(90deg, #FF6B35, #FF8C69);
-        }
-
-        .skill-progress-fill.design {
-            background: linear-gradient(90deg, #9C27B0, #BA68C8);
-        }
-
-        .skill-progress-fill.soft-skills {
-            background: linear-gradient(90deg, #00BCD4, #4DD0E1);
-        }
-
-        .skill-progress-fill.default {
-            background: linear-gradient(90deg, #667eea, #764ba2);
-        }
-
-        /* Animated shine effect */
-        .skill-progress-fill::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+        .about-img {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shine 3s ease-in-out infinite;
-            animation-delay: 1.5s;
-        }
-
-        @keyframes shine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        /* Projects Grid */
-        .projects-container {
-            display: grid;
-            gap: 60px;
-        }
-
-        .project-item {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-            background: var(--white);
+            max-width: 400px;
+            height: auto;
             border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 8px 30px rgba(88, 101, 242, 0.08);
+            box-shadow: 0 20px 40px rgba(88, 101, 242, 0.15);
+            border: 4px solid var(--white);
             transition: all 0.3s ease;
         }
 
-        .project-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(88, 101, 242, 0.15);
-        }
-
-        .project-item:nth-child(even) .project-content {
-            order: 2;
-        }
-
-        .project-item:nth-child(even) .project-image {
-            order: 1;
-        }
-
-        .project-image {
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .project-image img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .project-image:hover img {
-            transform: scale(1.05);
-        }
-
-        .project-placeholder {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-size: 1.2rem;
-            border-radius: 12px;
-        }
-
-        .project-placeholder i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .project-content h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-        }
-
-        .project-content p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var,--text-light);
-            margin-bottom: 2rem;
-        }
-
-        .project-links a {
-            display: inline-block;
-            padding: 12px 25px;
-            background: var(--primary-color);
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            margin-right: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .project-links a:hover {
-            background: var(--secondary-color);
-            color: var(--white);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(88, 101, 242, 0.3);
-        }
-
-        /* Photography Grid */
-        .photography-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .photo-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.08);
-        }
-
-        .photo-item:hover {
+        .about-img:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(88, 101, 242, 0.15);
+            box-shadow: 0 25px 50px rgba(88, 101, 242, 0.2);
         }
 
-        .photo-item img {
+        .about-img-placeholder {
             width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-
-        .photo-placeholder {
-            width: 100%;
-            height: 250px;
+            max-width: 400px;
+            height: 300px;
             background: linear-gradient(135deg, var(--light-blue), #F0F7FF);
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             color: var(--primary-color);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            display: none;
+            border: 4px solid var(--white);
+            box-shadow: 0 20px 40px rgba(88, 101, 242, 0.15);
+            margin: 0 auto;
         }
 
-        .photo-placeholder i {
-            font-size: 2.5rem;
+        .about-img-placeholder i {
+            font-size: 4rem;
             margin-bottom: 1rem;
-        }
-
-        .photo-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(88, 101, 242, 0.8), rgba(71, 82, 196, 0.8));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .photo-item:hover .photo-overlay {
-            opacity: 1;
-        }
-
-        .photo-overlay h4 {
-            color: var(--white);
-            font-size: 1.3rem;
-            font-weight: 600;
-            text-align: center;
         }
 
         /* Contact Information Section */
@@ -1064,6 +868,239 @@
             color: var(--primary-color);
         }
 
+        /* Projects Grid - Consistent Sizing */
+        .projects-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(88, 101, 242, 0.15);
+        }
+
+        .project-image {
+            position: relative;
+            overflow: hidden;
+            height: 220px;
+            flex-shrink: 0;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-placeholder {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.1rem;
+        }
+
+        .project-placeholder i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-content h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .project-content p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .project-links {
+            margin-top: auto;
+        }
+
+        .project-links a {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-right: 10px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .project-links a:hover {
+            background: var(--secondary-color);
+            color: var,--white);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.3);
+        }
+
+        /* Skills Section - Progress Bar Layout */
+        .skills-container {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(88, 101, 242, 0.08);
+        }
+
+        .skills-progress-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            margin-top: 3rem;
+            padding: 1rem 0;
+        }
+
+        .skill-progress-item {
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-progress-item.float-in {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .skill-progress-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .skill-progress-percentage {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-left: 1rem;
+        }
+
+        .skill-progress-bar {
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-progress-fill {
+            height: 100%;
+            border-radius: 20px;
+            width: 0%;
+            transition: width 2s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Skill Progress Colors */
+        .skill-progress-fill.programming {
+            background: linear-gradient(90deg, #4285F4, #6FA8F7);
+        }
+
+        .skill-progress-percentage.programming {
+            color: #4285F4;
+        }
+
+        .skill-progress-fill.web-development {
+            background: linear-gradient(90deg, #FF6B35, #FF8C69);
+        }
+
+        .skill-progress-percentage.web-development {
+            color: #FF6B35;
+        }
+
+        .skill-progress-fill.design {
+            background: linear-gradient(90deg, #9C27B0, #BA68C8);
+        }
+
+        .skill-progress-percentage.design {
+            color: #9C27B0;
+        }
+
+        .skill-progress-fill.tools {
+            background: linear-gradient(90deg, #00BCD4, #4DD0E1);
+        }
+
+        .skill-progress-percentage.tools {
+            color: #00BCD4;
+        }
+
+        .skill-progress-fill.database {
+            background: linear-gradient(90deg, #4CAF50, #81C784);
+        }
+
+        .skill-progress-percentage.database {
+            color: #4CAF50;
+        }
+
+        .skill-progress-fill.marketing {
+            background: linear-gradient(90deg, #FF9800, #FFB74D);
+        }
+
+        .skill-progress-percentage.marketing {
+            color: #FF9800;
+        }
+
+        .skill-progress-fill.cms {
+            background: linear-gradient(90deg, #607D8B, #90A4AE);
+        }
+
+        .skill-progress-percentage.cms {
+            color: #607D8B;
+        }
+
+        .skill-progress-fill.default {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .skill-progress-percentage.default {
+            color: #667eea;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero-content h1,
@@ -1160,6 +1197,29 @@
             .skills-progress-grid {
                 grid-template-columns: 1fr;
                 gap: 2rem;
+            }
+
+            .project-card {
+                margin-bottom: 1.5rem;
+            }
+
+            .project-image {
+                height: 180px;
+            }
+
+            .project-placeholder {
+                height: 180px;
+            }
+
+            .about-img {
+                max-width: 300px;
+                margin-bottom: 2rem;
+            }
+
+            .about-img-placeholder {
+                max-width: 300px;
+                height: 250px;
+                margin-bottom: 2rem;
             }
         }
     </style>

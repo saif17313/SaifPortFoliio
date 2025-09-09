@@ -99,8 +99,8 @@ namespace SaifPortFoliio
                 var jsProjects = projects.Select(p => new {
                     id = p.Id,
                     title = p.Title,
-                    description = p.ShortDescription,
-                    image = p.CoverImagePath,
+                    shortDescription = p.ShortDescription,
+                    coverImagePath = p.CoverImagePath,
                     liveUrl = p.LiveUrl,
                     repoUrl = p.RepoUrl
                 }).ToList();

@@ -114,22 +114,21 @@ function startTypewriter() {
 }
 
 function loadSkillsSection() {
-    console.log('?? Loading skills section...');
-    
+    console.log('??? Loading skills section...');
     var skillsList = document.getElementById('skills-progress-list');
     if (!skillsList) {
         console.log('? Skills progress list element not found');
         return;
     }
-
+    
     console.log('? Skills progress list element found');
-
-    // Check if server data is available from database
-    if (typeof window.serverData !== 'undefined' && window.serverData.skills) {
+    
+    // Check if server data is available
+    if (window.serverData && window.serverData.skills) {
         console.log('? Server data found from database:', window.serverData);
         window.portfolioSkills = window.serverData.skills;
     } else {
-        console.log('? No server data found from database');
+        console.log('?? No server data found from database');
         skillsList.innerHTML = '<div class="loading-state"><i class="fas fa-exclamation-triangle"></i><p>Unable to load skills from database. Please check database connection.</p></div>';
         return;
     }
@@ -138,22 +137,24 @@ function loadSkillsSection() {
     console.log('?? Skills to display from database:', skills.length, skills);
     
     if (skills.length === 0) {
-        console.log('? No skills found in database');
+        console.log('?? No skills found in database');
         skillsList.innerHTML = '<div class="loading-state"><i class="fas fa-info-circle"></i><p>No skills found in database.</p></div>';
         return;
     }
     
-    console.log('?? Generating skills HTML from database...');
+    console.log('?? Generating skills progress bars from database...');
     var html = '';
     for (var i = 0; i < skills.length; i++) {
         var skill = skills[i];
-        html += '<div class="skill-progress-item" style="animation-delay: ' + (i * 0.1) + 's">';
+        var colorClass = getSkillColorClass(skill.category);
+        
+        html += '<div class="skill-progress-item" style="animation-delay: ' + (i * 0.2) + 's">';
         html += '<div class="skill-progress-name">';
         html += skill.name;
-        html += '<span class="skill-progress-percentage ' + (skill.colorClass || 'default') + '">' + skill.level + '%</span>';
+        html += '<span class="skill-progress-percentage ' + colorClass + '">' + skill.level + '%</span>';
         html += '</div>';
         html += '<div class="skill-progress-bar">';
-        html += '<div class="skill-progress-fill ' + (skill.colorClass || 'default') + '" data-percentage="' + skill.level + '"></div>';
+        html += '<div class="skill-progress-fill ' + colorClass + '" data-percentage="' + skill.level + '"></div>';
         html += '</div>';
         html += '</div>';
     }
@@ -161,32 +162,45 @@ function loadSkillsSection() {
     skillsList.innerHTML = html;
     console.log('? Skills HTML generated and inserted from database');
     
-    // Animate progress bars after DOM is updated
+    // Start floating animations
     setTimeout(function() {
-        console.log('?? Starting skill animations...');
-        animateSkillBars();
+        animateSkillsWithFloating();
     }, 100);
 }
 
-function animateSkillBars() {
+function getSkillColorClass(category) {
+    if (!category) return 'default';
+    
+    var cat = category.toLowerCase();
+    if (cat.includes('programming')) return 'programming';
+    if (cat.includes('web')) return 'web-development';
+    if (cat.includes('design')) return 'design';
+    if (cat.includes('tools')) return 'tools';
+    if (cat.includes('database')) return 'database';
+    if (cat.includes('marketing')) return 'marketing';
+    if (cat.includes('cms')) return 'cms';
+    return 'default';
+}
+
+function animateSkillsWithFloating() {
     var skillItems = document.querySelectorAll('.skill-progress-item');
     var progressBars = document.querySelectorAll('.skill-progress-fill');
     
-    console.log('Animating', skillItems.length, 'skill items');
+    console.log('?? Starting floating animations for', skillItems.length, 'skills');
     
-    // Add floating animation to skill items
+    // Animate skill items with floating effect
     skillItems.forEach(function(item, index) {
         setTimeout(function() {
             item.classList.add('float-in');
         }, index * 150);
     });
     
-    // Animate progress bars
+    // Animate progress bars after floating animation
     progressBars.forEach(function(bar, index) {
         var percentage = bar.getAttribute('data-percentage');
         setTimeout(function() {
             bar.style.width = percentage + '%';
-        }, index * 200 + 500); // Start after float animation
+        }, index * 200 + 800); // Start after floating animations
     });
 }
 
@@ -195,29 +209,56 @@ function loadProjectsSection() {
     if (!projectsContainer) return;
 
     var projects = window.portfolioProjects;
+    if (!projects || projects.length === 0) {
+        projectsContainer.innerHTML = '<div class="loading-state"><i class="fas fa-exclamation-triangle"></i><p>No projects found in database.</p></div>';
+        return;
+    }
+
     var html = '';
 
     for (var i = 0; i < projects.length; i++) {
         var project = projects[i];
-        html += '<div class="project-item">';
+        html += '<div class="project-card">';
+        
+        // Project image from database
+        html += '<div class="project-image">';
+        if (project.coverImagePath && project.coverImagePath !== '') {
+            html += '<img src="' + project.coverImagePath + '" alt="' + project.title + '" />';
+        } else {
+            html += '<div class="project-placeholder">';
+            html += '<i class="fas fa-laptop-code"></i>';
+            html += '<span>Project Image</span>';
+            html += '</div>';
+        }
+        html += '</div>';
+        
+        // Project content from database
         html += '<div class="project-content">';
         html += '<h3>' + project.title + '</h3>';
-        html += '<p>' + project.description + '</p>';
+        
+        // Display description from database
+        if (project.shortDescription && project.shortDescription !== '') {
+            html += '<p>' + project.shortDescription + '</p>';
+        } else {
+            html += '<p>No description available for this project.</p>';
+        }
+        
+        // Project links from database
         html += '<div class="project-links">';
-        if (project.liveUrl) {
+        if (project.liveUrl && project.liveUrl !== '') {
             html += '<a href="' + project.liveUrl + '" target="_blank">Live Demo</a>';
         }
-        if (project.repoUrl) {
-            html += '<a href="' + project.repoUrl + '" target="_blank">View Code</a>';
+        if (project.repoUrl && project.repoUrl !== '') {
+            html += '<a href="' + project.repoUrl + '" target="_blank">Source Code</a>';
         }
-        html += '</div></div>';
-        html += '<div class="project-image">';
-        html += '<img src="' + project.image + '" alt="' + project.title + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';" />';
-        html += '<div class="project-placeholder"><i class="fas fa-laptop-code"></i><span>Project Image</span></div>';
-        html += '</div></div>';
+        html += '</div>';
+        html += '</div>';
+        
+        html += '</div>';
     }
 
-    projectsContainer.innerHTML = html || '<div class="loading-state"><i class="fas fa-info-circle"></i><p>No projects found.</p></div>';
+    projectsContainer.innerHTML = html;
+    console.log('? Projects loaded from database with images and descriptions. Count:', projects.length);
 }
 
 function loadPhotographySection() {
