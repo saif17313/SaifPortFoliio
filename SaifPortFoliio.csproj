@@ -214,6 +214,7 @@
     <Content Include="CONTACT_FORM_LOADING_SCREEN_REMOVED.md" />
     <Content Include="ADMIN_SCROLL_POSITION_FIXED.md" />
     <Content Include="CONTACT_FORM_POSITION_LOADING_FIXED.md" />
+    <Content Include="MESSAGE_SHOW_ONLY_SIMPLIFIED.md" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

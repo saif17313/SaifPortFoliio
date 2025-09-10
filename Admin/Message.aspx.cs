@@ -20,21 +20,32 @@ namespace SaifPortFoliio.Admin
                 return;
             }
 
+            // Maintain scroll position during PostBack
+            Page.MaintainScrollPositionOnPostBack = true;
+
             if (!IsPostBack)
             {
-                LoadUnreadMessages();
+                LoadAllMessages();
             }
         }
 
-        private void LoadUnreadMessages()
+        private void LoadAllMessages()
         {
             try
             {
-                // Get unread messages from database (IsRead = 0)
-                var unreadMessages = SaifPortFoliio.Db.GetUnreadMessages();
+                // Test database connection first
+                if (!SaifPortFoliio.Db.TestConnection())
+                {
+                    throw new Exception("Database connection failed");
+                }
+
+                // Get all messages from database (both read and unread)
+                var allMessages = SaifPortFoliio.Db.GetAllMessages();
+                
+                System.Diagnostics.Debug.WriteLine($"LoadAllMessages: Found {allMessages.Count} messages");
                 
                 // Pass only the actual table attributes to JavaScript
-                var jsMessages = unreadMessages.Select(m => new {
+                var jsMessages = allMessages.Select(m => new {
                     id = m.Id,
                     email = m.Email,
                     message = m.MessageText,
@@ -42,28 +53,42 @@ namespace SaifPortFoliio.Admin
                     createdAt = m.CreatedAt.ToString("MMM dd, yyyy HH:mm")
                 }).ToList();
 
-                // Inject data into JavaScript - ensure it loads immediately
+                // Inject data into JavaScript with enhanced error handling
                 string script = $@"
-                    window.serverMessages = {Newtonsoft.Json.JsonConvert.SerializeObject(jsMessages)};
-                    console.log('Server messages loaded:', window.serverMessages);
-                    
-                    // Load messages immediately if DOM is ready
-                    if (document.readyState === 'loading') {{
-                        document.addEventListener('DOMContentLoaded', function() {{
-                            if (window.serverMessages && window.serverMessages.length > 0) {{
-                                unreadMessages = window.serverMessages;
-                                displayMessages();
-                            }}
-                        }});
-                    }} else {{
-                        if (window.serverMessages && window.serverMessages.length > 0) {{
-                            setTimeout(function() {{
-                                if (typeof unreadMessages !== 'undefined') {{
-                                    unreadMessages = window.serverMessages;
+                    try {{
+                        window.serverMessages = {Newtonsoft.Json.JsonConvert.SerializeObject(jsMessages)};
+                        console.log('✅ Server messages loaded:', window.serverMessages);
+                        console.log('📊 Message count:', window.serverMessages.length);
+                        
+                        // Load messages immediately if DOM is ready
+                        if (document.readyState === 'loading') {{
+                            document.addEventListener('DOMContentLoaded', function() {{
+                                console.log('📱 DOM loaded, loading messages...');
+                                if (window.serverMessages) {{
+                                    allMessages = window.serverMessages;
                                     displayMessages();
+                                }}
+                            }});
+                        }} else {{
+                            console.log('📱 DOM already loaded, loading messages immediately...');
+                            setTimeout(function() {{
+                                if (typeof allMessages !== 'undefined' && window.serverMessages) {{
+                                    allMessages = window.serverMessages;
+                                    displayMessages();
+                                }} else {{
+                                    console.log('🔄 Variables not ready, retrying...');
+                                    setTimeout(function() {{
+                                        if (window.serverMessages) {{
+                                            allMessages = window.serverMessages;
+                                            displayMessages();
+                                        }}
+                                    }}, 500);
                                 }}
                             }}, 100);
                         }}
+                    }} catch (error) {{
+                        console.error('❌ Error in server script:', error);
+                        window.serverMessagesError = true;
                     }}
                 ";
                 
@@ -71,81 +96,54 @@ namespace SaifPortFoliio.Admin
             }
             catch (Exception ex)
             {
-                // Log error
+                // Log detailed error
                 System.Diagnostics.Debug.WriteLine("Error loading messages: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("Stack trace: " + ex.StackTrace);
                 
                 // Inject error message to JavaScript
                 string errorScript = $@"
-                    console.error('Error loading messages from server:', '{ex.Message}');
+                    console.error('❌ Error loading messages from server:', '{ex.Message}');
+                    console.error('📋 Error details:', '{ex.ToString().Replace("'", "\\''")}');
                     window.serverMessagesError = true;
+                    window.serverErrorMessage = '{ex.Message.Replace("'", "\\''")}';
                 ";
                 ClientScript.RegisterStartupScript(this.GetType(), "serverMessagesError", errorScript, true);
             }
         }
 
-        // Web method to mark message as read (sets IsRead = 1)
+        // Web method to get all messages (both read and unread) - for AJAX refresh
         [WebMethod]
-        public static bool MarkMessageAsRead(int messageId)
+        public static object GetAllMessages()
         {
             try
             {
-                return SaifPortFoliio.Db.MarkMessageAsRead(messageId);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error marking message as read: " + ex.Message);
-                return false;
-            }
-        }
-
-        // Web method to delete message
-        [WebMethod]
-        public static bool DeleteMessage(int messageId)
-        {
-            try
-            {
-                return SaifPortFoliio.Db.DeleteMessage(messageId);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error deleting message: " + ex.Message);
-                return false;
-            }
-        }
-
-        // Web method to mark all messages as read (sets IsRead = 1 for all unread)
-        [WebMethod]
-        public static bool MarkAllMessagesAsRead()
-        {
-            try
-            {
-                return SaifPortFoliio.Db.MarkAllMessagesAsRead();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error marking all messages as read: " + ex.Message);
-                return false;
-            }
-        }
-
-        // Web method to get fresh unread messages (IsRead = 0)
-        [WebMethod]
-        public static object GetUnreadMessages()
-        {
-            try
-            {
-                var unreadMessages = SaifPortFoliio.Db.GetUnreadMessages();
-                return unreadMessages.Select(m => new {
+                System.Diagnostics.Debug.WriteLine("GetAllMessages called via AJAX");
+                
+                // Test connection first
+                if (!SaifPortFoliio.Db.TestConnection())
+                {
+                    System.Diagnostics.Debug.WriteLine("Database connection failed in GetAllMessages");
+                    return new List<object>();
+                }
+                
+                var allMessages = SaifPortFoliio.Db.GetAllMessages();
+                System.Diagnostics.Debug.WriteLine($"GetAllMessages: Found {allMessages.Count} messages");
+                
+                var result = allMessages.Select(m => new {
                     id = m.Id,
                     email = m.Email,
                     message = m.MessageText,
                     isRead = m.IsRead,
                     createdAt = m.CreatedAt.ToString("MMM dd, yyyy HH:mm")
                 }).ToList();
+                
+                System.Diagnostics.Debug.WriteLine($"GetAllMessages: Returning {result.Count} formatted messages");
+                return result;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Error getting unread messages: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("Error getting all messages: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("Stack trace: " + ex.StackTrace);
                 return new List<object>();
             }
         }

@@ -280,7 +280,7 @@
                         <div class="nav-card-icon">
                             <i class="fas fa-envelope"></i>
                         </div>
-                        <span class="nav-card-text">Manage Messages</span>
+                        <span class="nav-card-text">Show Messages</span>
                     </div>
                 </a>
             </div>
