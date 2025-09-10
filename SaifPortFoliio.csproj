@@ -208,6 +208,7 @@
     <Content Include="MESSAGE_DATABASE_ISREAD_FIXED.md" />
     <Content Include="MESSAGE_SIMPLIFIED_TABLE_ATTRIBUTES_ONLY.md" />
     <Content Include="MESSAGE_LOADING_DEBUG_ENHANCED.md" />
+    <Content Include="ADMIN_CRUD_MANAGEMENT_COMPLETE.md" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
