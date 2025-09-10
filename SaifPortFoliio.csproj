@@ -146,6 +146,7 @@
     <Content Include="Content\img\photography\pic4.png" />
     <Content Include="Content\img\photography\pic5.png" />
     <Content Include="Content\img\photography\pic6.png" />
+    <Content Include="Content\img\photography\pic7.png" />
     <Content Include="Content\img\photography\placeholder.txt" />
     <Content Include="Content\img\profile\aboutme.png" />
     <Content Include="Content\img\profile\dp.png" />
@@ -209,6 +210,10 @@
     <Content Include="MESSAGE_SIMPLIFIED_TABLE_ATTRIBUTES_ONLY.md" />
     <Content Include="MESSAGE_LOADING_DEBUG_ENHANCED.md" />
     <Content Include="ADMIN_CRUD_MANAGEMENT_COMPLETE.md" />
+    <Content Include="CONTACT_FORM_POSTBACK_FINAL_FIX.md" />
+    <Content Include="CONTACT_FORM_LOADING_SCREEN_REMOVED.md" />
+    <Content Include="ADMIN_SCROLL_POSITION_FIXED.md" />
+    <Content Include="CONTACT_FORM_POSITION_LOADING_FIXED.md" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
