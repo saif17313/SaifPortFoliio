@@ -101,10 +101,15 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="Admin.aspx" />
-    <Content Include="AdminCRUD.aspx" />
+    <Content Include="AdminDashboard.aspx" />
     <Content Include="AdminLogin.aspx" />
     <Content Include="AdminPanel.aspx" />
     <Content Include="Admin\AdminDashboard.aspx" />
+    <Content Include="Admin\Message.aspx" />
+    <Content Include="Admin\Photography.aspx" />
+    <Content Include="Admin\Project.aspx" />
+    <Content Include="Admin\Role.aspx" />
+    <Content Include="Admin\Skill.aspx" />
     <Content Include="App_Data\Sql\01_tables.sql" />
     <Content Include="App_Data\Sql\02_seeds.sql" />
     <Content Include="App_Data\Sql\03_enhanced_seeds.sql" />
@@ -195,6 +200,10 @@
     <Content Include="CONTACT_SECTION_HEIGHT_OPTIMIZED.md" />
     <Content Include="PROFILE_IMAGE_UPDATED_DP.md" />
     <Content Include="PROFILE_FRAME_ENLARGED_SUMMARY.md" />
+    <Content Include="ADMIN_DASHBOARD_NAVIGATION_COMPLETE.md" />
+    <Content Include="ADMIN_DASHBOARD_ENHANCED_COMPLETE.md" />
+    <Content Include="ADMIN_NAVIGATION_FIXED_LOGIN_FLOW.md" />
+    <Content Include="ADMINCRUD_CLEANUP_SAFE_TO_DELETE.md" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -236,8 +245,8 @@
       <DependentUpon>Admin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AdminCRUD.aspx.cs">
-      <DependentUpon>AdminCRUD.aspx</DependentUpon>
+    <Compile Include="AdminDashboard.aspx.cs">
+      <DependentUpon>AdminDashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AdminLogin.aspx.cs">
@@ -250,6 +259,41 @@
     </Compile>
     <Compile Include="Admin\AdminDashboard.aspx.cs">
       <DependentUpon>AdminDashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Message.aspx.cs">
+      <DependentUpon>Message.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Message.aspx.designer.cs">
+      <DependentUpon>Message.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Photography.aspx.cs">
+      <DependentUpon>Photography.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Photography.aspx.designer.cs">
+      <DependentUpon>Photography.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Project.aspx.cs">
+      <DependentUpon>Project.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Project.aspx.designer.cs">
+      <DependentUpon>Project.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Role.aspx.cs">
+      <DependentUpon>Role.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Role.aspx.designer.cs">
+      <DependentUpon>Role.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Skill.aspx.cs">
+      <DependentUpon>Skill.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Skill.aspx.designer.cs">
+      <DependentUpon>Skill.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Code\Db.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />

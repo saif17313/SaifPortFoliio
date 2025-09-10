@@ -7,13 +7,14 @@ using System.Web.Services;
 
 namespace SaifPortFoliio
 {
-    public partial class AdminCRUD : System.Web.UI.Page
+    public partial class AdminDashboard : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Check authentication
-            if (Session["AdminAuthenticated"] == null || !(bool)Session["AdminAuthenticated"])
+            // Check if user is authenticated
+            if (Session["IsAdminLoggedIn"] == null || !(bool)Session["IsAdminLoggedIn"])
             {
+                // Redirect to login page if not authenticated
                 Response.Redirect("AdminLogin.aspx");
                 return;
             }
@@ -221,11 +222,33 @@ namespace SaifPortFoliio
             return urgentKeywords.Any(keyword => message.ToLower().Contains(keyword));
         }
 
-        protected void btnLogout_Click(object sender, EventArgs e)
+        protected void btnSignOut_Click(object sender, EventArgs e)
         {
-            Session.Clear();
-            Session.Abandon();
-            Response.Redirect("AdminLogin.aspx");
+            try
+            {
+                // Clear all session data
+                Session.Clear();
+                Session.Abandon();
+
+                // Clear any authentication cookies
+                if (Request.Cookies["AdminAuth"] != null)
+                {
+                    HttpCookie cookie = new HttpCookie("AdminAuth")
+                    {
+                        Expires = DateTime.Now.AddDays(-1) // Expire the cookie
+                    };
+                    Response.Cookies.Add(cookie);
+                }
+
+                // Redirect to login page
+                Response.Redirect("AdminLogin.aspx");
+            }
+            catch (Exception ex)
+            {
+                // Log error and redirect anyway
+                System.Diagnostics.Debug.WriteLine("Error during sign out: " + ex.Message);
+                Response.Redirect("AdminLogin.aspx");
+            }
         }
     }
 }

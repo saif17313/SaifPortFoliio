@@ -15,10 +15,10 @@ namespace SaifPortFoliio
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // If already logged in, redirect to admin panel
-            if (Session["AdminAuthenticated"] != null && (bool)Session["AdminAuthenticated"])
+            // If already logged in, redirect to admin dashboard
+            if (Session["IsAdminLoggedIn"] != null && (bool)Session["IsAdminLoggedIn"])
             {
-                Response.Redirect("AdminPanel.aspx");
+                Response.Redirect("AdminDashboard.aspx");
             }
         }
 
@@ -31,12 +31,12 @@ namespace SaifPortFoliio
             if (username == "saif" && password == "2107017")
             {
                 // Set session
-                Session["AdminAuthenticated"] = true;
+                Session["IsAdminLoggedIn"] = true;
                 Session["AdminUsername"] = username;
                 Session.Timeout = 30; // 30 minutes timeout
 
-                // Redirect to admin panel
-                Response.Redirect("AdminPanel.aspx");
+                // Redirect to admin dashboard
+                Response.Redirect("AdminDashboard.aspx");
             }
             else
             {
