@@ -100,7 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
-    <Content Include="Admin.aspx" />
     <Content Include="AdminDashboard.aspx" />
     <Content Include="AdminLogin.aspx" />
     <Content Include="AdminPanel.aspx" />
@@ -147,18 +146,19 @@
     <Content Include="Content\img\photography\pic5.png" />
     <Content Include="Content\img\photography\pic6.png" />
     <Content Include="Content\img\photography\pic7.png" />
+    <Content Include="Content\img\photography\pic8.png" />
     <Content Include="Content\img\photography\placeholder.txt" />
     <Content Include="Content\img\profile\aboutme.png" />
     <Content Include="Content\img\profile\dp.png" />
     <Content Include="Content\img\profile\placeholder.txt" />
     <Content Include="Content\img\profile\profile.jpg" />
+    <Content Include="Content\img\projects\dbms.png" />
     <Content Include="Content\img\projects\emergencyhelpline.png" />
     <Content Include="Content\img\projects\unifiedclass.png" />
     <Content Include="Content\img\projects\vendingmachine.png" />
     <Content Include="Content\img\projects\placeholder.txt" />
     <Content Include="Content\img\projects\portfolio.png" />
     <Content Include="Content\Site.css" />
-    <Content Include="Dashboard.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -191,30 +191,6 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Content\img\README.md" />
-    <Content Include="PORTFOLIO_STRUCTURE_GUIDE.md" />
-    <Content Include="BUILD_STATUS_RESOLVED.md" />
-    <Content Include="CS2001_ERROR_RESOLVED.md" />
-    <Content Include="DATABASE_CONNECTION_STATUS.md" />
-    <Content Include="DATABASE_CONTACT_SYSTEM_COMPLETE.md" />
-    <Content Include="FORM_TAG_ERROR_RESOLVED.md" />
-    <Content Include="CONTACT_FORM_SIMPLIFIED.md" />
-    <Content Include="CONTACT_SECTION_HEIGHT_OPTIMIZED.md" />
-    <Content Include="PROFILE_IMAGE_UPDATED_DP.md" />
-    <Content Include="PROFILE_FRAME_ENLARGED_SUMMARY.md" />
-    <Content Include="ADMIN_DASHBOARD_NAVIGATION_COMPLETE.md" />
-    <Content Include="ADMIN_DASHBOARD_ENHANCED_COMPLETE.md" />
-    <Content Include="ADMIN_NAVIGATION_FIXED_LOGIN_FLOW.md" />
-    <Content Include="ADMINCRUD_CLEANUP_SAFE_TO_DELETE.md" />
-    <Content Include="MESSAGE_MANAGEMENT_SEPARATED_COMPLETE.md" />
-    <Content Include="MESSAGE_DATABASE_ISREAD_FIXED.md" />
-    <Content Include="MESSAGE_SIMPLIFIED_TABLE_ATTRIBUTES_ONLY.md" />
-    <Content Include="MESSAGE_LOADING_DEBUG_ENHANCED.md" />
-    <Content Include="ADMIN_CRUD_MANAGEMENT_COMPLETE.md" />
-    <Content Include="CONTACT_FORM_POSTBACK_FINAL_FIX.md" />
-    <Content Include="CONTACT_FORM_LOADING_SCREEN_REMOVED.md" />
-    <Content Include="ADMIN_SCROLL_POSITION_FIXED.md" />
-    <Content Include="CONTACT_FORM_POSITION_LOADING_FIXED.md" />
-    <Content Include="MESSAGE_SHOW_ONLY_SIMPLIFIED.md" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -252,10 +228,6 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Admin.aspx.cs">
-      <DependentUpon>Admin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="AdminDashboard.aspx.cs">
       <DependentUpon>AdminDashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -323,10 +295,6 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Dashboard.aspx.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -371,12 +339,6 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
-    <Content Include="UNREAD_MESSAGES_FEATURE_COMPLETE.md" />
-    <Content Include="SKILLS_DATABASE_DISPLAY_COMPLETE.md" />
-    <Content Include="SKILLS_LOADING_FIXED.md" />
-    <Content Include="SKILLS_DATABASE_ONLY_COMPLETE.md" />
-    <Content Include="SMART_NAVIGATION_SCROLL_SPY_COMPLETE.md" />
-    <Content Include="SINGLE_DOT_NAVIGATION_FIXED.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
