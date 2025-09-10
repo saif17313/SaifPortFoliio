@@ -204,6 +204,10 @@
     <Content Include="ADMIN_DASHBOARD_ENHANCED_COMPLETE.md" />
     <Content Include="ADMIN_NAVIGATION_FIXED_LOGIN_FLOW.md" />
     <Content Include="ADMINCRUD_CLEANUP_SAFE_TO_DELETE.md" />
+    <Content Include="MESSAGE_MANAGEMENT_SEPARATED_COMPLETE.md" />
+    <Content Include="MESSAGE_DATABASE_ISREAD_FIXED.md" />
+    <Content Include="MESSAGE_SIMPLIFIED_TABLE_ATTRIBUTES_ONLY.md" />
+    <Content Include="MESSAGE_LOADING_DEBUG_ENHANCED.md" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
