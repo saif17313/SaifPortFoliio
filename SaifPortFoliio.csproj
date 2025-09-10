@@ -154,6 +154,7 @@
     <Content Include="Content\img\profile\profile.jpg" />
     <Content Include="Content\img\projects\dbms.png" />
     <Content Include="Content\img\projects\emergencyhelpline.png" />
+    <Content Include="Content\img\projects\numericalapp.png" />
     <Content Include="Content\img\projects\unifiedclass.png" />
     <Content Include="Content\img\projects\vendingmachine.png" />
     <Content Include="Content\img\projects\placeholder.txt" />
